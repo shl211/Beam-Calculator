@@ -109,3 +109,14 @@ select {
     margin-top: 5px;
     margin-bottom: 5px;
 }
+
+/* Error messages */
+
+#beam-length-error,
+#moment-of-inertia-error,
+#modulus-of-elasticity-error {
+    color: red;
+    font-size: 12px;
+    margin-top: 0px;
+    margin-bottom: 0px;
+}
