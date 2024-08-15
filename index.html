@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Beam Calculator</title>
+</head>
+<body>
+    <div class="header">
+        <p>Beam Calculator</p>
+    </div>
+
+    <div class="text-section">
+        <p>Information</p>
+    </div>
+
+    <div class="calculator-section">
+        <form class="beam-properties">
+            <label for="beam-length">Beam Length</label>
+            <input type="number" id="beam-length" name="beam-length" required><br>
+
+            <label for="moment-of-inertia">Moment of Inertia</label>
+            <input type="number" id="moment-of-inertia" name="moment-of-inertia" required><br>
+
+            <label for="modulus-of-elasticity">Modulus of Elasticity</label>
+            <input type="number" id="modulus-of-elasticity" name="modulus-of-elasticity" required><br>
+
+        </form>
+
+        <form class="add-supports-forces">
+            <label for="simply-supported">Simply Supported Support</label>
+            <input type="number" id="simply-supported" name="simply-supported" required>
+            <button type="button" id="add-simply-supported">Add</button><br>
+
+            <label for="roller">Roller Support</label>
+            <input type="number" id="roller" name="roller" required>
+            <button type="button" id="add-roller">Add</button><br>
+
+            <label for="cantilever">Cantilever Support</label>
+            <input type="number" id="cantilever" name="cantilever" required>
+            <button type="button" id="add-cantilever">Add</button><br>
+
+            <label for="point-load">Point Load</label>
+            <input type="number" id="point-load" name="point-load" required>
+            <button type="button" id="add-point-load">Add</button><br>
+        </form>
+
+        <div class="beam-visualisation">
+            <p>Beam Visualisation</p>
+        </div>
+
+    </div>
+</body>
+</html>
