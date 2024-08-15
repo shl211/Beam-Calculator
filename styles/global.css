@@ -12,17 +12,25 @@ body {
     display: flexbox;
 }
 
-.title{
+.title {
     font-size: 50px;
     font-weight: bold;
     padding: 10px 0 10px 0;
     margin: auto;
 }
 
-.text-section {
+.sub-heading {
+    text-align: center;
+    font-weight: 600;
+    font-size: 20px;
+    margin: 0;
+}
+
+.section {
     margin: 20px 20px 20px 20px;
     padding: 20px 20px 20px 20px;
     background-color: #fff;
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    text-align: justify;
 }

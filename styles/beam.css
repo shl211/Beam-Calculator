@@ -1,10 +1,35 @@
+
+/*Target all elements*/
+input, select {
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+input {
+    height: 20px;
+}
+
+select {
+    height: 23.5px;
+}
+
 /* Visualisation structure */
 
-.calculator-section {
+.calculator-section{
     display: flex;
 }
 
-.input-section {
+.beam-properties {
+    display: flex;
+    background-color: white;
+    margin: 20px 20px 20px 20px;
+    padding: 20px 20px 20px 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+
+.input-section{
     flex: 1;
     background-color: white;
     margin: 20px 20px 20px 20px;
@@ -22,6 +47,50 @@
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
+/* Beam Properties section actual*/
+.form-flex {
+    display: flex;
+    flex-direction: row;
+}
+
+.container {
+    flex:1;
+}
+
+.container .wrapper {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+.container .wrapper input {
+    flex: 1;
+}
+
+.container .wrapper .select {
+    flex: 1;
+}
+
+
+
+
+/* Beam Properties section*/
+
+
+
+
+
+
+.beam-properties .big-wrapper {
+    flex:1;
+}
+
+.beam-properties .wrapper {
+    flex: 1;
+    flex-direction: row;
+}
+
 /* Input section */
 .input-section input, .input-section select {
     height: 20px;
@@ -29,14 +98,32 @@
     border: 1px solid #ccc;
 }
 
+.input-section input {
+    flex: 6;
+}
+
+.input-section select {
+    flex: 1;
+    margin-left: 5px;
+    height: 23.5px;
+}
+
 .input-section button {
-    height: 30px;
+    height: 23.5px;
     border-radius: 5px;
     border: 1px solid #ccc;
     background-color: #f0f0f0;
     cursor: pointer;
+    margin-left: 5px;
 }
 
 .input-section label {
     display:inline-block;
+}
+
+.wrapper {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 5px;
+    margin-bottom: 5px;
 }

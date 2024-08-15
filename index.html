@@ -7,39 +7,55 @@
 
     <link rel="stylesheet" href="styles/global.css">
     <link rel="stylesheet" href="styles/beam.css">
+    
+    <!-- Add KaTeX support-->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.3/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.3/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.3/dist/contrib/auto-render.min.js"></script>
 </head>
 <body>
     <div class="header">
         <p class="title">Beam Calculator</p>
     </div>
 
-    <div class="text-section">
+    <div class="section">
         <p>This is a beam calculator based on Engineer's Beam Theory, which is widely taught at undergraduate level in engineering degrees. A refresher of the theory can be found <a href="./theory.html"> here</a>. This tool is designed to provide a visually appealing alternative to experimental labs that students usually experience, which can be very monotonous due to small deflections. This tool is designed so that changing parameters will instantaneously be reflected in the visualisation. For those who want to use this tool to check solutions, this tool also provides diagrams and equations for deflections, shear force and bending moment.</p>
     </div>
     
-    <div class="calculator-section">
-        
-        <div class="input-section">
-            <form class="beam-properties">
+    <div class="section">
+
+        <p class="sub-heading"> Beam Properties</p>
+
+        <form class="form-flex">
+            <div class="container">
                 <label for="beam-length">Beam Length</label><br>
-                <input type="number" id="beam-length" name="beam-length" required>
-                <select name="beam-length-unit" id="beam-length-unit">
-                    <option value="m">m</option>
-                    <option value="cm">cm</option>
-                    <option value="mm">mm</option>
-                </select>
-                <br>
-    
+                <div class="wrapper">
+                    <input type="number" id="beam-length" name="beam-length" required>
+                    <select name="beam-length-unit" id="beam-length-unit">
+                        <option value="m">m</option>
+                        <option value="cm">cm</option>
+                        <option value="mm">mm</option>
+                    </select>
+                    <br>
+                </div>
+            </div>
+
+            <div class="container">
                 <label for="moment-of-inertia">Moment of Inertia</label><br>
-                <input type="number" id="moment-of-inertia" name="moment-of-inertia" required>
-                <select name="moment-of-inertia-unit" id="moment-of-inertia-unit">
-                    <option value="m^4">m^4</option>
-                    <option value="cm^4">cm^4</option>
-                    <option value="mm^4">mm^4</option>
-                </select>
-                <br>
-    
-                <label for="modulus-of-elasticity">Modulus of Elasticity</label><br>
+                <div class="wrapper">
+                    <input type="number" id="moment-of-inertia" name="moment-of-inertia" required>
+                    <select name="moment-of-inertia-unit" id="moment-of-inertia-unit">
+                        <option value="m^4">m^4</option>
+                        <option value="cm^4">cm^4</option>
+                        <option value="mm^4">mm^4</option>
+                    </select>
+                    <br>
+                </div>
+            </div>
+
+            <div class="container">
+                <label for="modulus-of-elasticity">Young's Modulus</label><br>
+                <div class="wrapper">
                 <input type="number" id="modulus-of-elasticity" name="modulus-of-elasticity" required>
                 <select name="modulus-of-elasticity-unit" id="modulus-of-elasticity-unit">
                     <option value="GPa">GPa</option>
@@ -48,31 +64,50 @@
                     <option value="Pa">Pa</option>
                 </select>
                 <br>
-            </form>
-    
+                </div>
+            </div>
+        </form>
+
+
+    </div>
+
+
+    <div class="calculator-section">
+        
+        <div class="input-section">
+
+           
             <form class="add-supports-forces">
                 <label for="simply-supported">Simply Supported Support</label><br>
-                <input type="number" id="simply-supported" name="simply-supported" required>
-                <button type="button" id="add-simply-supported">Add</button><br>
-    
+                
+                <div class="wrapper">
+                    <input type="number" id="simply-supported" name="simply-supported" required>
+                    <button type="button" id="add-simply-supported">Add</button><br>
+                </div>
+
                 <label for="roller">Roller Support</label><br>
-                <input type="number" id="roller" name="roller" required>
-                <button type="button" id="add-roller">Add</button><br>
-    
+                <div class="wrapper">
+                    <input type="number" id="roller" name="roller" required>
+                    <button type="button" id="add-roller">Add</button><br>
+                </div>
+
                 <label for="cantilever">Cantilever Support</label><br>
-                <input type="number" id="cantilever" name="cantilever" required>
-                <button type="button" id="add-cantilever">Add</button><br>
-    
+                <div class="wrapper">
+                    <input type="number" id="cantilever" name="cantilever" required>
+                    <button type="button" id="add-cantilever">Add</button><br>
+                </div>
+
                 <label for="point-load">Point Load</label><br>
-                <input type="number" id="point-load" name="point-load" required>
-                <button type="button" id="add-point-load">Add</button><br>
+                <div class="wrapper">
+                    <input type="number" id="point-load" name="point-load" required>
+                    <button type="button" id="add-point-load">Add</button><br>
+                </div>
             </form>
         </div>
         
         <div class="beam-visualisation">
             <p>Beam Visualisation</p>
         </div>
-
     </div>
 </body>
 </html>
