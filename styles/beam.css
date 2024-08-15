@@ -1,0 +1,42 @@
+/* Visualisation structure */
+
+.calculator-section {
+    display: flex;
+}
+
+.input-section {
+    flex: 1;
+    background-color: white;
+    margin: 20px 20px 20px 20px;
+    padding: 20px 20px 20px 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.beam-visualisation {
+    flex: 2;
+    background-color: aqua;
+    margin: 20px 20px 20px 20px;
+    padding: 20px 20px 20px 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Input section */
+.input-section input, .input-section select {
+    height: 20px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+.input-section button {
+    height: 30px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    background-color: #f0f0f0;
+    cursor: pointer;
+}
+
+.input-section label {
+    display:inline-block;
+}

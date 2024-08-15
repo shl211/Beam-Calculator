@@ -4,10 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Beam Calculator</title>
+
+    <link rel="stylesheet" href="styles/global.css">
+    <link rel="stylesheet" href="styles/beam.css">
 </head>
 <body>
     <div class="header">
-        <p>Beam Calculator</p>
+        <p class="title">Beam Calculator</p>
     </div>
 
     <div class="text-section">
@@ -15,36 +18,57 @@
     </div>
 
     <div class="calculator-section">
-        <form class="beam-properties">
-            <label for="beam-length">Beam Length</label>
-            <input type="number" id="beam-length" name="beam-length" required><br>
-
-            <label for="moment-of-inertia">Moment of Inertia</label>
-            <input type="number" id="moment-of-inertia" name="moment-of-inertia" required><br>
-
-            <label for="modulus-of-elasticity">Modulus of Elasticity</label>
-            <input type="number" id="modulus-of-elasticity" name="modulus-of-elasticity" required><br>
-
-        </form>
-
-        <form class="add-supports-forces">
-            <label for="simply-supported">Simply Supported Support</label>
-            <input type="number" id="simply-supported" name="simply-supported" required>
-            <button type="button" id="add-simply-supported">Add</button><br>
-
-            <label for="roller">Roller Support</label>
-            <input type="number" id="roller" name="roller" required>
-            <button type="button" id="add-roller">Add</button><br>
-
-            <label for="cantilever">Cantilever Support</label>
-            <input type="number" id="cantilever" name="cantilever" required>
-            <button type="button" id="add-cantilever">Add</button><br>
-
-            <label for="point-load">Point Load</label>
-            <input type="number" id="point-load" name="point-load" required>
-            <button type="button" id="add-point-load">Add</button><br>
-        </form>
-
+        
+        <div class="input-section">
+            <form class="beam-properties">
+                <label for="beam-length">Beam Length</label><br>
+                <input type="number" id="beam-length" name="beam-length"  required>
+                <select name="beam-length-unit" id="beam-length-unit">
+                    <option value="m">m</option>
+                    <option value="cm">cm</option>
+                    <option value="mm">mm</option>
+                </select>
+                <br>
+    
+                <label for="moment-of-inertia">Moment of Inertia</label><br>
+                <input type="number" id="moment-of-inertia" name="moment-of-inertia" required>
+                <select name="moment-of-inertia-unit" id="moment-of-inertia-unit">
+                    <option value="m^4">m^4</option>
+                    <option value="cm^4">cm^4</option>
+                    <option value="mm^4">mm^4</option>
+                </select>
+                <br>
+    
+                <label for="modulus-of-elasticity">Modulus of Elasticity</label><br>
+                <input type="number" id="modulus-of-elasticity" name="modulus-of-elasticity" required>
+                <select name="modulus-of-elasticity-unit" id="modulus-of-elasticity-unit">
+                    <option value="GPa">GPa</option>
+                    <option value="MPa">MPa</option>
+                    <option value="kPa">kPa</option>
+                    <option value="Pa">Pa</option>
+                <br>
+    
+            </form>
+    
+            <form class="add-supports-forces">
+                <label for="simply-supported">Simply Supported Support</label><br>
+                <input type="number" id="simply-supported" name="simply-supported" required>
+                <button type="button" id="add-simply-supported">Add</button><br>
+    
+                <label for="roller">Roller Support</label><br>
+                <input type="number" id="roller" name="roller" required>
+                <button type="button" id="add-roller">Add</button><br>
+    
+                <label for="cantilever">Cantilever Support</label><br>
+                <input type="number" id="cantilever" name="cantilever" required>
+                <button type="button" id="add-cantilever">Add</button><br>
+    
+                <label for="point-load">Point Load</label><br>
+                <input type="number" id="point-load" name="point-load" required>
+                <button type="button" id="add-point-load">Add</button><br>
+            </form>
+        </div>
+        
         <div class="beam-visualisation">
             <p>Beam Visualisation</p>
         </div>
