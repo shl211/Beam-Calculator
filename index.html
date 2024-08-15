@@ -30,7 +30,7 @@
             <div class="container">
                 <label for="beam-length">Beam Length</label><br>
                 <div class="wrapper">
-                    <input type="number" id="beam-length" name="beam-length" required>
+                    <input type="number" id="beam-length" name="beam-length">
                     <select name="beam-length-unit" id="beam-length-unit">
                         <option value="m">m</option>
                         <option value="cm">cm</option>
@@ -43,7 +43,7 @@
             <div class="container">
                 <label for="moment-of-inertia">Moment of Inertia</label><br>
                 <div class="wrapper">
-                    <input type="number" id="moment-of-inertia" name="moment-of-inertia" required>
+                    <input type="number" id="moment-of-inertia" name="moment-of-inertia">
                     <select name="moment-of-inertia-unit" id="moment-of-inertia-unit">
                         <option value="m^4">m^4</option>
                         <option value="cm^4">cm^4</option>
@@ -56,7 +56,7 @@
             <div class="container">
                 <label for="modulus-of-elasticity">Young's Modulus</label><br>
                 <div class="wrapper">
-                <input type="number" id="modulus-of-elasticity" name="modulus-of-elasticity" required>
+                <input type="number" id="modulus-of-elasticity" name="modulus-of-elasticity">
                 <select name="modulus-of-elasticity-unit" id="modulus-of-elasticity-unit">
                     <option value="GPa">GPa</option>
                     <option value="MPa">MPa</option>
@@ -71,43 +71,61 @@
 
     </div>
 
-
-    <div class="calculator-section">
+    <div class="split-section">
         
-        <div class="input-section">
+        <div class="vertical-split-section">
 
-           
-            <form class="add-supports-forces">
-                <label for="simply-supported">Simply Supported Support</label><br>
-                
-                <div class="wrapper">
-                    <input type="number" id="simply-supported" name="simply-supported" required>
-                    <button type="button" id="add-simply-supported">Add</button><br>
-                </div>
+            <!-- Add support section here-->
+            <div class="support-section">
 
-                <label for="roller">Roller Support</label><br>
-                <div class="wrapper">
-                    <input type="number" id="roller" name="roller" required>
-                    <button type="button" id="add-roller">Add</button><br>
-                </div>
+                <p class="sub-heading">Add Supports</p>
 
-                <label for="cantilever">Cantilever Support</label><br>
-                <div class="wrapper">
-                    <input type="number" id="cantilever" name="cantilever" required>
-                    <button type="button" id="add-cantilever">Add</button><br>
-                </div>
+                <form class="add-supports">
+                    
+                    <label for="simply-supported">Simply Supported Support</label><br>
+                    <div class="wrapper">
+                        <input type="number" id="simply-supported" name="simply-supported" placeholder="Location">
+                        <button type="button" id="add-simply-supported">Add</button><br>
+                    </div>
 
-                <label for="point-load">Point Load</label><br>
-                <div class="wrapper">
-                    <input type="number" id="point-load" name="point-load" required>
-                    <button type="button" id="add-point-load">Add</button><br>
-                </div>
-            </form>
+                    <label for="roller">Roller Support</label><br>
+                    <div class="wrapper">
+                        <input type="number" id="roller" name="roller" placeholder="Location">
+                        <button type="button">Add</button><br>
+                    </div>
+
+                    <label for="cantilever">Cantilever Support</label><br>
+                    <div class="wrapper">
+                        <input type="number" id="cantilever" name="cantilever" placeholder="Location">
+                        <button type="button">Add</button><br>
+                    </div>
+
+                </form>
+            </div>
+
+            <!-- Add force section here-->
+            <div class="force-section">
+                <p class="sub-heading">Add Forces</p>
+
+                <form class="add-forces">
+
+                    <label for="point-force">Point Force</label><br>
+                    <div class="wrapper">
+                        <input type="number" id="point-force" name="point-force" placeholder="Location">
+                        <input type="number" id="point-force-magnitude" name="point-force-magnitude" placeholder="Magnitude">
+                        <button type="button">Add</button><br>
+                    </div>
+
+                </form>
+            </div>
+            
         </div>
-        
-        <div class="beam-visualisation">
-            <p>Beam Visualisation</p>
+
+        <div class="visualisation">
+            <p class="sub-heading">Beam Visualisation</p>
         </div>
+
     </div>
+
 </body>
 </html>
