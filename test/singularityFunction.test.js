@@ -45,4 +45,52 @@ describe("Singularity Function", function() {
 
         assert.strictEqual(equation.equationText,"42");
     });
+
+    it('String formatted correctly for general case f(x) = k <x-a>^n', function() {
+        
+        let domainStart = 23;
+        let scale = 2.5;
+        let exponent = 4;
+
+        let equation = new SingularityFunction(domainStart,scale,exponent);
+
+        assert.strictEqual(equation.equationText,'2.5<x-23>^4');
+
+        domainStart = -23;
+        scale = -2.5;
+        exponent = -4;
+
+        equation = new SingularityFunction(domainStart,scale,exponent);
+
+        assert.strictEqual(equation.equationText,'-2.5<x+23>^-4');
+    });
+
+    it('String formatted correctly for f(x) = kx', function() {
+        let domainStart = 0;
+        let scale = 2.5;
+        let exponent = 1;
+
+        let equation = new SingularityFunction(domainStart,scale,exponent);
+
+        assert.strictEqual(equation.equationText,'2.5x');
+    });
+
+    it('String formatted correctly for f(x) = <x-k> and -<x-k>', function() {
+        let domainStart = 1;
+        let scale = 1;
+        let exponent = 1;
+
+        let equation = new SingularityFunction(domainStart,scale,exponent);
+
+        assert.strictEqual(equation.equationText,'<x-1>');
+
+        domainStart = 1;
+        scale = -1;
+        exponent = 1;
+
+        equation = new SingularityFunction(domainStart,scale,exponent);
+
+        assert.strictEqual(equation.equationText,'-<x-1>');
+    });
+    
 });

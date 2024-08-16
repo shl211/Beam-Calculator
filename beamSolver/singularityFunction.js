@@ -56,10 +56,15 @@ class SingularityFunction {
         }
 
         //for general cases, first extract expression relating to <x-a>
-        if (this._domain == 0) {
+        if (this._domainStart == 0) {
             //simplify as <x-0> = x 
             domainString = `x`
         } 
+        else if (this._domainStart < 0) {
+            let domainAbs = - this._domainStart;
+            let formattedDomain = parseFloat(domainAbs.toPrecision(sigFig));
+            domainString = `<x+${formattedDomain}>`;
+        }
         else {
             let formattedDomain = parseFloat(this._domainStart.toPrecision(sigFig));
             domainString = `<x-${formattedDomain}>`;
@@ -71,7 +76,7 @@ class SingularityFunction {
         }
         else {
             let formattedExponent = parseFloat(this._exponent.toPrecision(sigFig));
-            exponentString = `${formattedExponent}`
+            exponentString = `^${formattedExponent}`
         }
 
         //extract scale for equation, taking care of special cases of +- 1 where text format is different
@@ -86,7 +91,7 @@ class SingularityFunction {
             scaleString = `${formattedScale}`;
         }
 
-        let equationString = `${scaleString,domainString,exponentString}`;
+        let equationString = `${scaleString}${domainString}${exponentString}`;
 
         return equationString;
     }
