@@ -81,11 +81,40 @@ class BeamAnalysis {
 
     calculateReactions(supportList,loadList) {
 
-        
+        let forceSum = 0;
+        let momentSum = 0;
 
+        //sum forces and moments
+        for(let i = 0; i < loadList.length; ++i) {
+            forceSum += loadList[i].load;
+            momentSum += loadList[i].load * loadList[i].position;
+        }
 
+        //only 2 real cases of determinate beams
+        let pinJoint = (supportList.length == 2);
+
+        //case 1 of 2: pin-roller beam
+        //vertical and moment equation equilibrium and solve
+        if(pinJoint) {
+            let reactionForce1 = (supportList[1].position * forceSum - momentSum) / (supportList[0].position - supportList[1].position);
+            let reactionForce2 = - reactionForce1 - forceSum;
+            
+            //assign properties to supports
+            supportList[0].reactionForce = reactionForce1;
+            supportList[1].reactionForce = reactionForce2;
+            supportList[0].reactionMoment = 0;
+            supportList[1].reactionMoment = 0;
+        }
+        //case 2 of 2: cantilever beam
+        else {
+            let reactionForce1 = - forceSum;
+            let reactionMoment2 = - reactionForce1 * supportList[0].position - momentSum;
+
+            //assign properties to supports
+            supportList[0].reactionForce = reactionForce1;
+            supportList[0].reactionMoment = reactionMoment2;
+        }
     }
-
 }
 
 module.exports = BeamAnalysis;
