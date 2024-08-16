@@ -9,6 +9,8 @@ class Support {
 
         this._position = position;
         this._supportType = supportType;
+        this._reactionForce = null;
+        this._reactionMoment = null;
     }
 
     get position() {
@@ -17,6 +19,22 @@ class Support {
 
     get supportType() {
         return this._supportType;
+    }
+
+    set reactionForce(verticalForce) {
+        this._reactionForce = verticalForce;
+    }
+
+    get reactionForce() {
+        return this._reactionForce;
+    }
+
+    set reactionMoment(newMoment) {
+        this._reactionMoment = newMoment;
+    }
+
+    get reactionMoment() {
+        return this._reactionMoment;
     }
 }
 

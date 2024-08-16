@@ -51,4 +51,23 @@ describe("Supports", function() {
             }
         );
     });
+
+    it("Checking assignment of reaction forces and moments", function() {
+        let position = 10.4;
+        let supportType = "ROLLER";
+
+        let rollerSupport = new Support(position,supportType);
+
+        //should be null if nothing assigned
+        assert.equal(rollerSupport.reactionForce,null);
+        assert.equal(rollerSupport.reactionMoment,null);
+
+        let newForce = -20.4;
+        let newMoment = 2.4;
+        rollerSupport.reactionForce = newForce;
+        rollerSupport.reactionMoment = newMoment;
+
+        assert.equal(rollerSupport.reactionForce,newForce);
+        assert.equal(rollerSupport.reactionMoment,newMoment);
+    });
 });
