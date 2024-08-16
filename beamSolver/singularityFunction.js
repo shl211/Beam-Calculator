@@ -95,6 +95,16 @@ class SingularityFunction {
 
         return equationString;
     }
+
+    evaluate(xValue) {
+        if (xValue < this._domainStart) {
+            return 0;
+        }
+        else {
+            return this._scale * (xValue - this._domainStart) ** this._exponent;
+        }
+    }
+
 }
 
 module.exports = SingularityFunction;

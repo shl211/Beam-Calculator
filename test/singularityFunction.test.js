@@ -93,4 +93,15 @@ describe("Singularity Function", function() {
         assert.strictEqual(equation.equationText,'-<x-1>');
     });
     
+    it("Correct function evaluations", function() {
+        let domainStart = 3.4;
+        let scale = -2;
+        let exponent = 3;
+
+        let equation = new SingularityFunction(domainStart,scale,exponent);
+        assert.equal(equation.evaluate(0),0);
+        assert.equal(equation.evaluate(3.4),0);
+        assert.strictEqual(equation.evaluate(6.8),-2 * (6.8 - 3.4) ** 3);
+    });
+
 });
