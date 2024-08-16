@@ -78,7 +78,7 @@ class SingularityFunction {
         if(this._scale == 1) {
             scaleString = "";
         }
-        else if (scale == -1) {
+        else if (this._scale == -1) {
             scaleString = "-";
         }
         else {
@@ -91,3 +91,5 @@ class SingularityFunction {
         return equationString;
     }
 }
+
+module.exports = SingularityFunction;

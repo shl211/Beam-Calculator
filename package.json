@@ -4,7 +4,7 @@
   "description": "An online beam calculator based off Engineer's Beam Theory.",
   "main": "index.js",
   "scripts": {
-    "test": "mocha"
+    "test": "mocha --reporter spec"
   },
   "devDependencies": {
     "mocha": "^10.0.0"
