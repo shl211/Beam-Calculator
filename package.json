@@ -1,0 +1,15 @@
+{
+  "name": "beamcalculator",
+  "version": "1.0.0",
+  "description": "An online beam calculator based off Engineer's Beam Theory.",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha"
+  },
+  "devDependencies": {
+    "mocha": "^10.0.0"
+  },
+  "keywords": [],
+  "author": "Stephen Liu",
+  "license": "ISC"
+}
