@@ -5,6 +5,12 @@
 class SingularityFunction {
     
     constructor(domainStart,scale,exponent) {
+
+        //this function only valid if a > 0
+        if (domainStart < 0) {
+            throw new Error("Singularity function domain start must be greater than 0");
+        }
+
         this._domainStart = domainStart;
         this._scale = scale;
         this._exponent = exponent;
@@ -60,11 +66,6 @@ class SingularityFunction {
             //simplify as <x-0> = x 
             domainString = `x`
         } 
-        else if (this._domainStart < 0) {
-            let domainAbs = - this._domainStart;
-            let formattedDomain = parseFloat(domainAbs.toPrecision(sigFig));
-            domainString = `<x+${formattedDomain}>`;
-        }
         else {
             let formattedDomain = parseFloat(this._domainStart.toPrecision(sigFig));
             domainString = `<x-${formattedDomain}>`;

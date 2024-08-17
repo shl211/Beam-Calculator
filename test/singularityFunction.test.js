@@ -3,6 +3,22 @@ const SingularityFunction = require('../beamSolver/singularityFunction');
 
 describe("Singularity Function", function() {
     
+    it('Check constructor rejects invalid domain start',function() {
+
+        let domainStart = -1;
+        let scale = 2;
+        let exponent = 3;
+    
+        const invalidEquation = () => new SingularityFunction(domainStart,scale,exponent);
+        assert.throws(
+            invalidEquation, {
+                name: 'Error',
+                message: 'Singularity function domain start must be greater than 0'
+            }
+        );
+    });
+
+
     it('Getters return internal variables',function() {
         let domainStart = 1;
         let scale = 2;
@@ -17,11 +33,11 @@ describe("Singularity Function", function() {
 
     it('Setters should change equation',function() {
         let equation = new SingularityFunction(1,2,3);
-        equation.domainStart = -3;
+        equation.domainStart = 3;
         equation.scale = -2.3;
         equation.exponent = 24;
 
-        assert.strictEqual(equation.domainStart,-3);
+        assert.strictEqual(equation.domainStart,3);
         assert.strictEqual(equation.scale,-2.3);
         assert.strictEqual(equation.exponent,24);
     });
@@ -55,14 +71,6 @@ describe("Singularity Function", function() {
         let equation = new SingularityFunction(domainStart,scale,exponent);
 
         assert.strictEqual(equation.equationText,'2.5<x-23>^4');
-
-        domainStart = -23;
-        scale = -2.5;
-        exponent = -4;
-
-        equation = new SingularityFunction(domainStart,scale,exponent);
-
-        assert.strictEqual(equation.equationText,'-2.5<x+23>^-4');
     });
 
     it('String formatted correctly for f(x) = kx', function() {
