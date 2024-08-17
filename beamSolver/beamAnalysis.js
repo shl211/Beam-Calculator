@@ -1,5 +1,7 @@
 const Support = require('./support.js');
 const Force = require('./force.js');
+const SingularityFunction = require('./singularityFunction.js');
+const BeamMath = require('./beamMath.js');
 
 class BeamAnalysis {
     
@@ -21,6 +23,12 @@ class BeamAnalysis {
         this._inertia = 1;
     };
 
+    /**
+     * 
+     * @param {SingularityFunction[]} supportList 
+     * @param {SingularityFunction[]} loadList 
+     * @param {number} length 
+     */
     initialise(supportList,loadList,length) {
         this._supportList = supportList;
         this._loadList = loadList;
@@ -114,6 +122,30 @@ class BeamAnalysis {
             supportList[0].reactionForce = reactionForce1;
             supportList[0].reactionMoment = reactionMoment2;
         }
+    }
+
+    /**
+     * 
+     * @param {Support[]} supportList 
+     * @param {Force[]} loadList 
+     */
+    computeBendingMoments(supportList,loadList) {
+
+        //add support reactions as singularity
+        //all are point loads, giving bending moment of form BM = -F<x-a>
+        //reaction moments are constant, and can be denoted as point moments using BM = c = M <x - a> ^ 0 (i.e. a step function)
+        for(let i = 0; i < supportList.length; ++i) {
+            this._bendingMomentEquationList.push(new SingularityFunction(supportList[i].position,-supportList[i].reactionForce,1));
+            this._bendingMomentEquationList.push(new SingularityFunction(supportList[i].position,-supportList[i].reactionMoment,0));
+        }
+
+        //add load list as singularity functions, currently only consider point loads
+        for(let i = 0; i < loadList.length; ++i) {
+            this._bendingMomentEquationList.push(new SingularityFunction(loadList[i].position,-loadList[i].load,1));
+        }
+
+        //now simplify this list, remove repeats and eliminate zeros
+        BeamMath.simplifySingularityFuncList(this._bendingMomentEquationList);
     }
 }
 
