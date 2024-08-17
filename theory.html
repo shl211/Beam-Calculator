@@ -6,6 +6,7 @@
     <title>Document</title>
 
     <link rel="stylesheet" href="styles/global.css">
+    <link rel="stylesheet" href="styles/theory.css">
 
     <!-- Add KaTeX -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.7/dist/katex.min.css">
@@ -46,12 +47,63 @@
             <li>Transverse sections remain plane after deformation</li>
             <li>Beams are slender</li>
         </ul>
+
+        <p>The beam convention to be used is seen as follows:</p>
+        <img src="images/beamConvention.png">
     </div>
 
     <div class="section">
         <p class="sub-heading">Singularity Equations</p>
 
-        <p> Singularity equations take the form $f(x) = &lt;x-a&gt;^n$. This function is defined as: </p>
+        <p> Singularity equations take the form $f(x) = k &lt;x-a&gt;^n$. This function is defined as: 
+
+            $$
+            f(x) = k &lt;x-a&gt;^n = 
+            \begin{cases}
+            0 & \text{if } x &lt; a \\
+            k (x-a) ^ n & \text{if } x \geq a \\
+            \end{cases}
+            $$
+
+        This is an extremely useful property, as the effect on bending moment due to point loads, point moments, constant distributed loads and triangular loads can all be reduced down a single function, rather than a complicated set of inter-related piecewise functions. Later on this will simplify the process of obtaining the deflection from the bending moment, as continuity between piecewise functions are naturally imposed in singularity functions. Singularity equations can also be differentiated and integrated as follows: 
+
+            $$
+                \frac{d}{dx} k &lt;x-a&gt;^n = kn &lt;x-a&gt;^{n-1} 
+            $$
+
+            $$
+                \int k &lt;x-a&gt;^n \,dx = \frac{k}{n+1} &lt;x-a&gt;^{n+1} + c
+            $$ 
+
+        As previously stated, many standard forces effect on bending moment can be represented as a singularity function. These expressions will be very useful later on. An arbitrary point load on a beam can be described by two characteristics: the distance from the origin and the force vector (This gives sufficient information for force and moment balances). Now, consider a point load $F$ at distance $a$ from the origin, as seen in the diagram below:
+
+        </p>
+
+        <img class="point-load-diagram" src="images/pointLoad.png">
+
+        <p>
+            Making a cut at point 1 yields $M(x) = 0$ for $x &lt; a$, where $M(x)$ is bending moment at some point along the beam. Making a cut at point 2 yields $M(x) = -F(x-a)$. This can be easily represented by a singularity function: 
+
+            $$
+            M_{point,load}(x) = -F &lt;x-a&gt; \\
+            $$
+
+            This is a powerful result, as the effect of support reaction forces can be modelled using this result. A similar result can be obtained for a point moment, such as that introduced by a fixed end support. Imagine a point moment of force $M^*$ in the anticlockwise direction and distance $a$ from the origin, as seen in the diagram below:
+        </p>
+
+        <img class="point-moment-diagram" src="images/pointMoment.png">
+
+        <p>
+            Using cut 1, it is easily deduced that $M(x) = 0$ for $x &lt; a$. At cut 2, $M(x) = -M^*$ for $x \geq a$. This can be represented by the singularity function:
+
+            $$
+            M_{point,moment}(x) = - M^* &lt;x-a&gt;^0
+            $$
+        </p>
+
+        <p>
+            Now you may be wondering what's the point? Behind the scenes of the beam visualisation, the program exploits these singularity functions to rapidly compute the bending moment distribution across the entire graph by decomposing the beam into into individual supports and forces before utilising linear superposition to sum the effects of each individual force. From a student's perspective, this method is likely to be easier to implement and les error-prone compared to utilising piece-wise functions, especially for more complex beams.
+        </p>
     </div>
     
     <div class="section">
