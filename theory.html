@@ -50,10 +50,12 @@
 
         <p>The beam convention to be used is seen as follows:</p>
         <img src="images/beamConvention.png">
+
+        <p>Note that the internal forces follow the beam convention, while the external forces, such as reaction loads and applied loads, are taken as positive upwards for forces and anticlockwise for moments.</p>
     </div>
 
     <div class="section">
-        <p class="sub-heading">Singularity Equations</p>
+        <p class="sub-heading" id="singularity-function-section">Singularity Equations</p>
 
         <p> Singularity equations take the form $f(x) = k &lt;x-a&gt;^n$. This function is defined as: 
 
@@ -108,12 +110,58 @@
     
     <div class="section">
         <p class="sub-heading">Maxwell's Equations</p>
+
+        <p>
+        Maxwell's equations is a simple way to determine whether the beam is a mechanism, determinate or indeterminate. It is a powerful tool, but does not necessarily capture all edge cases. It is noted that a roller support constrains 1 degree of freedom, a pin support constrains 2 degrees of freedom and a fixed end support constrains 3 degrees of freedom. Each constraint introduces an additional known quantity, allowing us to construct an additional equation to solve. In beams, moment equilibrium and force equilibrium each provide an equation, so we have a system of three equations. If we have the same number of constraints as equations, then the system is solvable without additional compatibility equations, or in other words determinate. If we have less constriants than equations, then the system is a meachanism. If we have more constraints than equations, then the system is indeterminate.
+        </p>
+
+        <p>
+            This is a simple tool that is sufficient in most cases, but fails in some special cases. For example, consider a beam with three roller supports. Each roller support introduces one constraint, giving three constraints. This suggests that it is a determinate beam, but obviously it is a mechanism as the entire system can move without deformation. This is a special case that Maxwell's equations fail to capture. In general, Maxwell's equations are a good tool to determine whether a beam is determinate or indeterminate, but it is not a foolproof method. Another note is that it is often convenient to assume that any horizontal reaction forces are 0, which is a valid assumption for linear beam theory which assumes small deflections. As the beam rotates, the vertical component of the deflection is $y\cos{\theta} \approx \theta$ and the horizontal component is $y\sin{\theta} \approx 0$. This simplifies the problem from a system of three equations to a system of two equations, which is easier to solve, especially for computing reaction forces in determinate beams.
+        </p>
     </div>
 
     <div class="section">
         <p class="sub-heading">Determinate Beams</p>
 
-        <p>For determinate beams, reaction forces are easily deduced as sufficient</p>
+        <p>There are only two configurations of determinate beams: pin-roller and cantilever. A pin-roller diagram and cantilever diagram can be found below: </p>
+
+        <img class="determinate-beams-diagram" src="images/determinateBeams.png">
+
+        <p>
+            For a pin-roller, the force and moment equilibrium (with origin as datum) can be described as follows: 
+
+            $$
+            R_1 + R_2 = -\Sigma F_i \\
+            R_1 x_1 + R_2 x_2 = -\Sigma F_i x_i - \Sigma M^*_i
+            $$
+
+            This can be easily solved for $R_1$ and $R_2$. The solution takes the form:
+
+            $$
+            R_1 = \frac{x_2 \Sigma F_i - \Sigma F_i x_i - \Sigma M^*_i}{x_1 - x_2} \\
+            R_2 = - R_1 - \Sigma F_i 
+            $$
+
+            Meanwhile, for the cantilever beam, the force and moment equilibrium can be described as follows:
+
+            $$
+            R_1 = -\Sigma F_i \\
+            R_1 x_1 + M = -\Sigma F_i x_i - \Sigma M^*_i
+            $$
+
+            Now that reaction forces and moments are known, the bending moments along the beam can be computed via the method described in the <a href="#singularity-function-section">singularity function section</a>. Namely, for the pin-roller beam, each support and force will generate a bending moment contirbution, which can then be linearlly summed. This gives the bending moment distribution:
+
+            $$
+            M(x) = -R_1 &lt;x - x_1&gt; - R_2 &lt;x - x_2&gt; - \Sigma F_i &lt;x - x_i&gt; - \Sigma M^*_i &lt;x - x_i&gt;^0
+            $$
+
+            Similarly for the cantilever beam, the bending moment distribution can be computed as follows:
+
+            $$
+            M(x) = -R_1 &lt;x - x_1&gt; - M_1 &lt;x - x_1&gt;^0 - \Sigma F_i &lt;x - x_i&gt; - \Sigma M^*_i &lt;x - x_i&gt;^0
+            $$
+
+        </p>
     </div>
 
     <div class="section">

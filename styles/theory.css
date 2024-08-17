@@ -1,4 +1,4 @@
-.point-load-diagram, .point-moment-diagram {
+.point-load-diagram, .point-moment-diagram, .determinate-beams-diagram {
     width: 90%;
-    max-width: 600px;
+    max-width: 650px;
 }
