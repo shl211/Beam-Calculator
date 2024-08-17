@@ -2,6 +2,15 @@ const assert = require('assert'); //improt Node assert module
 const BeamMath = require('../beamSolver/beamMath');
 const SingularityFunction = require('../beamSolver/singularityFunction');
 
+const checkFunction = (singularityFunc1,singularityFunc2) => {
+    let sameDomain = (singularityFunc1.domainStart == singularityFunc2.domainStart);
+    let sameExponent = (singularityFunc1.exponent == singularityFunc2.exponent);
+    let sameScale = (singularityFunc1.scale == singularityFunc1.scale);
+    
+    return (sameDomain && sameExponent && sameScale);
+}
+
+
 describe("Beam Maths Library", function() {
 
     it("Add singularity functions", function() {
@@ -81,14 +90,6 @@ describe("Beam Maths Library", function() {
         let correct2 = false;
         let correct3 = false;
         
-        const checkFunction = (singularityFunc1,singularityFunc2) => {
-            let sameDomain = (singularityFunc1.domainStart == singularityFunc2.domainStart);
-            let sameExponent = (singularityFunc1.exponent == singularityFunc2.exponent);
-            let sameScale = (singularityFunc1.scale == singularityFunc1.scale);
-            
-            return (sameDomain && sameExponent && sameScale);
-        }
-        
         assert.equal(funcList.length,3); //first check correct length for list
         for(let i = 0; i < 3; ++i) {
             if(checkFunction(funcList[i],res1)) correct1 = true;
@@ -101,4 +102,66 @@ describe("Beam Maths Library", function() {
         assert.equal(correct3,true);
     });
 
+    it("Indefinite integration of singularity function", function() {
+
+        let func1 = new SingularityFunction(3,1,2);//<x-3>^2
+        let func1integral = new SingularityFunction(3,1/3,3);//1/3<x-3>^3
+        
+        let result = BeamMath.integrateSingularityFunction(func1);
+        assert.equal(checkFunction(result,func1integral),true);
+    });
+
+
+    it("Indefinite integration of list of singularity functions", function() {
+    
+        let func1 = new SingularityFunction(3,1,2);//<x-3>^2
+        let func2 = new SingularityFunction(2,2,1);//2<x-2>
+        let func3 = new SingularityFunction(2,0,4);//0
+
+        let funcList = [func1,func2,func3];
+
+        let func1integral = new SingularityFunction(3,1/3,3);//1/3<x-3>^3
+        let func2integral = new SingularityFunction(2,1,2);//<x-2>^2
+        let func3integral = new SingularityFunction(2,0,5);//0
+    
+        let result = BeamMath.integrateSingularityFuncList(funcList);
+
+        assert.equal(checkFunction(result[0],func1integral),true);
+        assert.equal(checkFunction(result[1],func2integral),true);
+        assert.equal(checkFunction(result[2],func3integral),true);
+
+    });
+
+    it("Definite integration of list of singularity functions", function() {
+        
+        let func1 = new SingularityFunction(3,1,2);//<x-3>^2
+        let funcList = [func1];
+        let boundaryCondition = [5,2];
+
+        let res1 = BeamMath.integrateWithConstantSingularityFuncList(funcList,boundaryCondition);
+        let res1expected = new SingularityFunction(3,1/3,3);//1/3<x-3>^3
+        let res1expectedConstant = new SingularityFunction(0,-2/3,0);//-2/3
+
+        assert.equal(checkFunction(res1[0],res1expected),true);
+        assert.equal(checkFunction(res1[1],res1expectedConstant),true);
+
+        //more complex exmaple, with more functions
+        let func2 = new SingularityFunction(2,2,1);//2<x-2>
+        let func3 = new SingularityFunction(3,1,2);//<x-3>^2
+        let func4 = new SingularityFunction(4,-1,1);//-<x-4>
+        boundaryCondition = [3,-2];
+
+        funcList = [func2,func3,func4];
+
+        let res2 = BeamMath.integrateWithConstantSingularityFuncList(funcList,boundaryCondition);
+        let res2expected = new SingularityFunction(2,1,2);//<x-2>^2
+        let res3expected = new SingularityFunction(3,1/3,3);//1/3<x-3>^3
+        let res4expected = new SingularityFunction(4,-1/2,2);//-1/2<x-4>^2
+        let res2expectedConstant = new SingularityFunction(0,-3,0);//-3
+
+        assert.equal(checkFunction(res2[0],res2expected),true);
+        assert.equal(checkFunction(res2[1],res3expected),true);
+        assert.equal(checkFunction(res2[2],res4expected),true);
+        assert.equal(checkFunction(res2[3],res2expectedConstant),true);
+    });
 });

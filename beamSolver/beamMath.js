@@ -75,6 +75,56 @@ class BeamMath {
             }
         }
     }
+
+    /**
+     * Indefinite integration of a singularity function
+     * @param {SingularityFunction} 
+     * @returns {SingularityFunction}
+     */
+    static integrateSingularityFunction(singularityFunction) {
+        
+        let newExponent = singularityFunction.exponent + 1;
+        let newScale = singularityFunction.scale / newExponent;
+
+        return new SingularityFunction(singularityFunction.domainStart,newScale,newExponent);
+    }
+
+    
+    /**
+     * 
+     * @param {SingularityFunction[]} singularityFuncList 
+     */
+    static integrateSingularityFuncList(singularityFuncList) {
+        
+        let integratedFuncList = new Array(singularityFuncList.length);
+
+        for(let i = 0; i < singularityFuncList.length; ++i) {
+            integratedFuncList[i] = this.integrateSingularityFunction(singularityFuncList[i]);
+        }
+
+        return integratedFuncList;
+    }
+
+    /**
+     * 
+     * @param {singularityFunction[]} singularityFuncList 
+     * @param {number[]} boundaryCondition - in form [x,f(x)]
+     * @returns 
+     */
+    static integrateWithConstantSingularityFuncList(singularityFuncList,boundaryCondition) {
+        
+        let integratedFuncList = this.integrateSingularityFuncList(singularityFuncList);
+
+        //y'(x) integrates to y(x) = integral(y'(x)) + c
+        //BC is y(x1) = f(x1) -> rearrange to solve for c = y(x1) - integral(y'(x1))
+        let c = boundaryCondition[1] - this.evaluateSingularityFuncList(integratedFuncList,boundaryCondition[0]);
+        
+        //c is the same as c<x-0>^0
+        let constant = new SingularityFunction(0,c,0);
+        integratedFuncList.push(constant); //add to list
+
+        return integratedFuncList;
+    }
 }
 
 module.exports = BeamMath;
