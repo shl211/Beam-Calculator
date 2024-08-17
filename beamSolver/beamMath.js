@@ -1,6 +1,6 @@
 //suite of static methods to perform maths operations required for beam solver
 //contains custom methods to manipulate singularityFunction, integration and some matrix solvers
-const SingularityFunction = require('./SingularityFunction');
+const SingularityFunction = require('./singularityFunction.js');
 
 class BeamMath {
     
@@ -28,7 +28,7 @@ class BeamMath {
      * 
      * @param {SingularityFunction[]} singularityFuncList 
      * @param {number} x 
-     * @returns 
+     * @returns {number}
      */
     static evaluateSingularityFuncList(singularityFuncList,x) {
 
@@ -40,7 +40,41 @@ class BeamMath {
         return result;
     }
 
+    /**
+     * 
+     * @param {SingularityFunction[]} singularityFuncList 
+     */
+    static simplifySingularityFuncList(singularityFuncList) {
 
+        let tolerance = 1e-6;
+
+        for(let i = 0; i < singularityFuncList.length; ++i) {
+
+            let currentFunc = singularityFuncList[i];
+
+            if (currentFunc.scale == 0) {
+                singularityFuncList.splice(i,1);
+                --i; //removed vlaue from list, readjust incrementor to not skip values
+                continue;
+            }
+
+            //check whether every function in front of it can be summed, all functions behind it already checked
+            for(let j = i + 1; j < singularityFuncList.length; ++j) {
+                let nextFunc = singularityFuncList[j];
+
+                let checkDomainFloatTolerance = ((currentFunc.domainStart < nextFunc.domainStart + tolerance && currentFunc.domainStart > nextFunc.domainStart - tolerance));
+
+                let checkExponentFloatTolerance = ((currentFunc.exponent < nextFunc.exponent + tolerance && currentFunc.exponent > nextFunc.exponent - tolerance));
+                
+                if( checkDomainFloatTolerance && checkExponentFloatTolerance) {
+                    let summedFunc = this.addSingularityFunction(currentFunc,nextFunc);
+                    singularityFuncList.splice(j,1);
+                    singularityFuncList[i] = summedFunc;
+                    --j;
+                }
+            }
+        }
+    }
 }
 
 module.exports = BeamMath;
