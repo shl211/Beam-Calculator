@@ -93,6 +93,7 @@ class BeamMath {
     /**
      * 
      * @param {SingularityFunction[]} singularityFuncList 
+     * @returns {SingularityFunction[]}
      */
     static integrateSingularityFuncList(singularityFuncList) {
         
@@ -109,7 +110,7 @@ class BeamMath {
      * 
      * @param {singularityFunction[]} singularityFuncList 
      * @param {number[]} boundaryCondition - in form [x,f(x)]
-     * @returns 
+     * @returns {SingularityFunction[]}
      */
     static integrateWithConstantSingularityFuncList(singularityFuncList,boundaryCondition) {
         
@@ -125,6 +126,86 @@ class BeamMath {
 
         return integratedFuncList;
     }
+
+
+    /**
+     * Indefinite double integration of singularity function
+     * @param {SingularityFunction} singularityFuncList 
+     * @returns {SingularityFunction}
+     */
+    static doubleIntegrateSingularityFunction(singularityFunction) {
+            
+        let exponentPlusOne = singularityFunction.exponent + 1;
+        let newExponent = singularityFunction.exponent + 2;
+        let newScale = singularityFunction.scale / (newExponent * exponentPlusOne);
+
+        return new SingularityFunction(singularityFunction.domainStart,newScale,newExponent);
+    }
+
+    /**
+     * 
+     * @param {SingularityFunction[]} singularityFuncList 
+     * @returns {SingularityFunction[]}
+     */
+    static doubleIntegrateSingularityFuncList(singularityFuncList) {
+        
+        let doubleIntegratedFuncList = new Array(singularityFuncList.length);
+
+        for(let i = 0; i < singularityFuncList.length; ++i) {
+            doubleIntegratedFuncList[i] = this.doubleIntegrateSingularityFunction(singularityFuncList[i]);
+        }
+
+        return doubleIntegratedFuncList;
+    }
+
+    
+    /**
+     * Double integration, computes constants where both boundary conditions are of form [x,f(x)]
+     * @param {SingularityFunction[]} singularityFuncList
+     * @param {number[]} boundaryCondition1 - in form [x1,f(x1)]
+     * @param {number[]} boundaryCondition2 - in form [x2,f(x2)]
+     * @returns {SingularityFunction[]}
+     */
+    static doubleIntegrateWithTwoConstants(singularityFuncList,boundaryCondition1,boundaryCondition2) {
+        
+        let doubleIntegratedFuncList = this.doubleIntegrateSingularityFuncList(singularityFuncList);
+
+        //y''(x) integrates to y(x) = integral(integral(y''(x))) + c1x + c2
+        //set of simultaneous equations to solve for c1 and c2, use rearranged format to avoid matrix operations
+        let [x1,y1] = boundaryCondition1;
+        let [x2,y2] = boundaryCondition2;
+        let y1Indefinite = this.evaluateSingularityFuncList(doubleIntegratedFuncList,x1);
+        let y2Indefinite = this.evaluateSingularityFuncList(doubleIntegratedFuncList,x2);
+
+        let c1 = ((y2 - y1) + (y1Indefinite - y2Indefinite)) / (x2 - x1);
+        let c2 = y1 - y1Indefinite - c1 * x1;
+
+        //c1 is the same as c1<x-0>^1 and c2 is the same as c2<x-0>^0
+        let constant1 = new SingularityFunction(0,c1,1);
+        let constant2 = new SingularityFunction(0,c2,0);
+
+        doubleIntegratedFuncList.push(constant1);
+        doubleIntegratedFuncList.push(constant2);
+
+        return doubleIntegratedFuncList;
+    }
+
+
+    /**
+     * Double integration, computes constants where first boundary conditions is form [x,f'(x)] and second of form [x,f(x)]
+     * @param {SingularityFunction[]} singularityFuncList
+     * @param {number[]} boundaryCondition1 - in form [x1,f(x1)]
+     * @param {number[]} boundaryCondition2 - in form [x2,f(x2)]
+     * @returns {SingularityFunction[]}
+     */ 
+    static doubleIntegrateWithOneConstant(singularityFuncList,boundaryCondition1,boundaryCondition2) { 
+
+        let integratedFuncList = this.integrateWithConstantSingularityFuncList(singularityFuncList,boundaryCondition1);
+        let doubleIntegratedFuncList = this.integrateWithConstantSingularityFuncList(integratedFuncList,boundaryCondition2);
+
+        return doubleIntegratedFuncList;
+    }
+
 }
 
 module.exports = BeamMath;

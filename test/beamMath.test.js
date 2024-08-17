@@ -164,4 +164,76 @@ describe("Beam Maths Library", function() {
         assert.equal(checkFunction(res2[2],res4expected),true);
         assert.equal(checkFunction(res2[3],res2expectedConstant),true);
     });
+
+    it("Indefinite double integration of singularity function", function() {
+
+        let func1 = new SingularityFunction(3,1,2);//<x-3>^2
+        let func1doubleintegral = new SingularityFunction(3,1/12,4);//1/12<x-3>^4
+        
+        let result = BeamMath.doubleIntegrateSingularityFunction(func1);
+        assert.equal(checkFunction(result,func1doubleintegral),true);
+    });
+
+    it("Indefinite double integration of list of singularity functions", function() {
+        
+            let func1 = new SingularityFunction(3,1,2);//<x-3>^2
+            let func2 = new SingularityFunction(2,2,1);//2<x-2>
+            let func3 = new SingularityFunction(2,-4,4);//-4<x-2>^4
+    
+            let funcList = [func1,func2,func3];
+    
+            let func1doubleintegral = new SingularityFunction(3,1/12,4);//1/12<x-3>^4
+            let func2doubleintegral = new SingularityFunction(2,1/3,3);//1/3<x-2>^3
+            let func3doubleintegral = new SingularityFunction(2,-2/15,6);//-2/15<x-2>^6
+            
+            let result = BeamMath.doubleIntegrateSingularityFuncList(funcList);
+    
+            assert.equal(checkFunction(result[0],func1doubleintegral),true);
+            assert.equal(checkFunction(result[1],func2doubleintegral),true);
+            assert.equal(checkFunction(result[2],func3doubleintegral),true);
+        });
+
+    it("Double integration of list of singularity functions where boundary conditions are [x1,y1],[x2,y2]", function() {
+
+        let func1 = new SingularityFunction(3,1,2);//<x-3>^2
+        let func2 = new SingularityFunction(2,2,1);//2<x-2>
+        let func3 = new SingularityFunction(1,4,1);//4<x-1>
+
+        let funcList = [func1,func2,func3];
+        let boundaryCondition1 = [1,2];
+        let boundaryCondition2 = [4,1.5];
+
+        let res = BeamMath.doubleIntegrateWithTwoConstants(funcList,boundaryCondition1,boundaryCondition2);
+        
+        let res1expected = new SingularityFunction(3,1/12,4);//1/12<x-3>^4
+        let res2expected = new SingularityFunction(2,1/3,3);//1/3<x-2>^3
+        let res3expected = new SingularityFunction(1,2/3,3);//2/3<x-1>^3
+        let res1expectedConstant = new SingularityFunction(0,-85/12,1);//-85/12
+        let res2expectedConstant = new SingularityFunction(0,109/12,0);//109/12
+
+        assert.equal(checkFunction(res[0],res1expected),true);
+        assert.equal(checkFunction(res[1],res2expected),true);
+        assert.equal(checkFunction(res[2],res3expected),true);
+        assert.equal(checkFunction(res[3],res1expectedConstant),true);
+        assert.equal(checkFunction(res[4],res2expectedConstant),true);
+    });
+
+    it("Double integration of list of singularity functions where boundary conditions are [x1,y'1],[x2,y2]", function() {
+
+        let func1 = new SingularityFunction(3,1,2);//<x-3>^2
+        let func2 = new SingularityFunction(2,2,1);//2<x-2>
+        let func3 = new SingularityFunction(0.5,4,1);//4<x-0.5>
+
+        let funcList = [func1,func2,func3];
+        let boundaryCondition1 = [1,2]; //y'(1) = 2
+        let boundaryCondition2 = [4,1.5]; //y(4) = 1.5
+
+        let res = BeamMath.doubleIntegrateWithOneConstant(funcList,boundaryCondition1,boundaryCondition2);
+
+        let res1expected = new SingularityFunction(3,1/12,4);//1/12<x-3>^4
+        let res2expected = new SingularityFunction(2,1/3,3);//1/3<x-2>^3
+        let res3expected = new SingularityFunction(0.5,2/3,3);//2/3<x-0.5>^3
+        let res1expectedConstant = new SingularityFunction(0,23/12,1);//23/12x
+        let res2expectedConstant = new SingularityFunction(0,-75/2,0);//-75/2
+    });
 });
