@@ -161,6 +161,20 @@
             M(x) = -R_1 &lt;x - x_1&gt; - M_1 &lt;x - x_1&gt;^0 - \Sigma F_i &lt;x - x_i&gt; - \Sigma M^*_i &lt;x - x_i&gt;^0
             $$
 
+            Once bending moments are calculated, the deflection can be integrated from bending moment deflection. The relation bewtween the two is: 
+
+            $$
+            EI \frac{d^2y}{dx^2} = - M(x)
+            $$
+
+            By assuming homogenouse and constant cross-section, this can be double integrated to obtain the deflection: 
+
+            $$
+            y' = \frac{1}{EI}\int - M(x) \,dx + c_1 \\ 
+            y = \frac{1}{EI}\int \int - M(x) \,dx \,dx + c_1 x + c_2
+            $$
+
+            Boundary conditions can now be imposed. For a pin-roller, the boundary conditions are $y(x_1) = 0$ and $y(x_2) = 0$. For a cantilever, the boundary conditions are $y(x_1) = 0$ and $y'(x_1) = 0$. These can be used to solve for the constants $c_1$ and $c_2$. The deflection, slope and bending moment is now known. (If shear force is known, can differentiate bending moment, or using the method in the <a href="#singularity-function-section">singularity function section</a>).
         </p>
     </div>
 
