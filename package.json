@@ -7,7 +7,7 @@
     "test": "mocha --reporter spec"
   },
   "devDependencies": {
-    "mocha": "^10.0.0"
+    "mocha": "^10.7.3"
   },
   "keywords": [],
   "author": "Stephen Liu",
