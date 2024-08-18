@@ -7,6 +7,7 @@
 
     <link rel="stylesheet" href="styles/global.css">
     <link rel="stylesheet" href="styles/beam.css">
+    <link rel="stylesheet" href="styles/beamVisualisation.css">
     
     <!-- Add KaTeX support-->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.3/dist/katex.min.css">
@@ -14,7 +15,8 @@
     <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.3/dist/contrib/auto-render.min.js"></script>
 
     <!-- Other custom scripts -->
-    <script src="scripts/script.js" defer></script>
+    <script src="scripts/validateInput.js" defer></script>
+    <script src="scripts/beamTracker.js" defer></script>
 </head>
 <body>
     <div class="header">
@@ -91,19 +93,19 @@
                     <label for="simply-supported">Simply Supported Support</label><br>
                     <div class="wrapper">
                         <input type="number" id="simply-supported" name="simply-supported" placeholder="Location">
-                        <button type="button" id="add-simply-supported">Add</button><br>
+                        <button type="button" id="add-simple-support">Add</button><br>
                     </div>
 
                     <label for="roller">Roller Support</label><br>
                     <div class="wrapper">
                         <input type="number" id="roller" name="roller" placeholder="Location">
-                        <button type="button">Add</button><br>
+                        <button type="button" id="add-roller-support">Add</button><br>
                     </div>
 
                     <label for="cantilever">Cantilever Support</label><br>
                     <div class="wrapper">
                         <input type="number" id="cantilever" name="cantilever" placeholder="Location">
-                        <button type="button">Add</button><br>
+                        <button type="button" id="add-fixed-support">Add</button><br>
                     </div>
 
                 </form>
@@ -119,7 +121,7 @@
                     <div class="wrapper">
                         <input type="number" id="point-force" name="point-force" placeholder="Location">
                         <input type="number" id="point-force-magnitude" name="point-force-magnitude" placeholder="Magnitude">
-                        <button type="button">Add</button><br>
+                        <button type="button" id="add-point-force">Add</button><br>
                     </div>
 
                 </form>

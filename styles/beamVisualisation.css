@@ -1,0 +1,9 @@
+.triangle-button {
+    width: 0;
+    height: 0;
+    border-left: 75px solid transparent;
+    border-right: 75px solid transparent;
+    border-bottom: 150px solid #3498db;
+    position: relative;
+    cursor: pointer;
+}
