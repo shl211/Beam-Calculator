@@ -142,8 +142,7 @@ describe("Beam Maths Library", function() {
         let res1 = BeamMath.integrateWithConstantSingularityFuncList(funcList,boundaryCondition);
         let res1expected = new SingularityFunction(3,1/3,3);//1/3<x-3>^3
         let res1expectedConstant = new SingularityFunction(0,-2/3,0);//-2/3
-        console.log(2/3 == 0.6666666666666665)
-        console.log(res1)
+
         assert.equal(checkFunction(res1[0],res1expected),true);
         assert.equal(checkFunction(res1[1],res1expectedConstant),true);
         //more complex exmaple, with more functions

@@ -89,6 +89,39 @@ describe("Determinate Pin-Roller Beam Analysis", function() {
         assert.deepStrictEqual(result[1],expectedBC1);
         assert.deepStrictEqual(result[2],expectedBC2);
     })
+
+    it("Check deflection equation", function() {
+
+        let BCType = 2;
+        let BC1 = [support1.position,0];
+        let BC2 = [support2.position,0];
+
+        determinateBeam.computeDeflection(determinateBeam._bendingMomentEquationList,BCType,BC1,BC2);
+
+        //expect deflection to be v = -1/15<x-0>^3 - 0.1 <x-5>^3 + 1/6 <x-3>^3 + 7/5 <x-0>
+        let expectedFunc1 = new SingularityFunction(0,-1/15,3);
+        let expectedFunc2 = new SingularityFunction(5,-0.1,3);
+        let expectedFunc3 = new SingularityFunction(3,1/6,3);
+        let expectedFunc4 = new SingularityFunction(0,7/5,1);
+
+        let correct1 = false;
+        let correct2 = false;
+        let correct3 = false;
+        let correct4 = false;
+        
+        assert.equal(determinateBeam._displacementEquationList.length,4); //first check correct length for list
+        for(let i = 0; i < 4; ++i) {
+            if(checkFunction(determinateBeam._displacementEquationList[i],expectedFunc1)) correct1 = true;
+            if(checkFunction(determinateBeam._displacementEquationList[i],expectedFunc2)) correct2 = true;
+            if(checkFunction(determinateBeam._displacementEquationList[i],expectedFunc3)) correct3 = true;
+            if(checkFunction(determinateBeam._displacementEquationList[i],expectedFunc4)) correct4 = true;
+        }
+        //since length is verified, and simplification gives unique values, if all bool are true, then correct
+        assert.equal(correct1,true);
+        assert.equal(correct2,true);
+        assert.equal(correct3,true);
+        assert.equal(correct4,true);
+    })
 });
 
 describe("Determinate Cantilever Beam Analysis", function() {
@@ -160,6 +193,35 @@ describe("Determinate Cantilever Beam Analysis", function() {
         assert.equal(result[0],expectedType);
         assert.deepStrictEqual(result[1],expectedBC1);
         assert.deepStrictEqual(result[2],expectedBC2);
+    })
+
+    it("Check deflection equation", function() {
+
+        let BCType = 1;
+        let BC1 = [support1.position,0];
+        let BC2 = [support1.position,0];
+
+        determinateBeam.computeDeflection(determinateBeam._bendingMomentEquationList,BCType,BC1,BC2);
+
+        //expect deflection to be v = 1/6 <x-3>^3 - 1/6 <x-0>^3 - 3/2<x-0>^2
+        let expectedFunc1 = new SingularityFunction(3,1/6,3);
+        let expectedFunc2 = new SingularityFunction(0,-1/6,3);
+        let expectedFunc3 = new SingularityFunction(0,-1.5,2);
+
+        let correct1 = false;
+        let correct2 = false;
+        let correct3 = false;
+        
+        assert.equal(determinateBeam._displacementEquationList.length,3); //first check correct length for list
+        for(let i = 0; i < 3; ++i) {
+            if(checkFunction(determinateBeam._displacementEquationList[i],expectedFunc1)) correct1 = true;
+            if(checkFunction(determinateBeam._displacementEquationList[i],expectedFunc2)) correct2 = true;
+            if(checkFunction(determinateBeam._displacementEquationList[i],expectedFunc3)) correct3 = true;
+        }
+        //since length is verified, and simplification gives unique values, if all bool are true, then correct
+        assert.equal(correct1,true);
+        assert.equal(correct2,true);
+        assert.equal(correct3,true);
     })
 
 

@@ -2,6 +2,7 @@ const Support = require('./support.js');
 const Force = require('./force.js');
 const SingularityFunction = require('./singularityFunction.js');
 const BeamMath = require('./beamMath.js');
+const { interfaces } = require('mocha');
 
 class BeamAnalysis {
     
@@ -146,6 +147,56 @@ class BeamAnalysis {
 
         //now simplify this list, remove repeats and eliminate zeros
         BeamMath.simplifySingularityFuncList(this._bendingMomentEquationList);
+    }
+
+    /**
+     * 
+     * @param {Support[]} supportList 
+     * @returns {Array[]} Array of [BCtype,BC1,BC2]
+     */
+    findBoundaryConditions (supportList) {
+
+        //if cantilever
+        if (supportList.length == 1) {
+            let BC1 = [supportList[0].position,0];
+            let BC2 = [supportList[0].position,0];
+            return [1,BC1,BC2];
+        }
+        //for pin-roller
+        else {
+            let BC1 = [supportList[0].position,0];
+            let BC2 = [supportList[1].position,0];
+            return [2,BC1,BC2];
+        }
+    }
+
+    /**
+     * 
+     * @param {SingularityFunction[]} bendingMomentList 
+     * @param {number} BCType 
+     * @param {Array[]} BC1 
+     * @param {Array[]} BC2 
+     */
+    computeDeflection(bendingMomentList,BCType,BC1,BC2) {
+
+        //for cantilever
+        if (BCType == 1) {
+            this._displacementEquationList = BeamMath.doubleIntegrateWithOneConstant(bendingMomentList,BC1,BC2);
+        }
+
+        //for pin-roller
+        else {
+            //technically, this does v' = f(x) + c1, v = g(x) + c1x + c2, but we actually do -v' = f(x) + c1, -v = g(x) + c1x + c2
+            //so if constant is non-zero, there would be an error, but in beam context, the constant should collapse to zero for most cases
+            this._displacementEquationList = BeamMath.doubleIntegrateWithTwoConstants(bendingMomentList,BC1,BC2);
+        }
+
+        //right now, have  negative deflection, flip
+        for(let i = 0; i < this._displacementEquationList.length; ++i) {
+            this._displacementEquationList[i].scale *= -1;
+        }
+
+        BeamMath.simplifySingularityFuncList(this._displacementEquationList);
     }
 }
 
