@@ -7,9 +7,10 @@ const SingularityFunction = require('../beamSolver/singularityFunction');
 
 //function to compare whether two singualrity functions are the same
 const checkFunction = (singularityFunc1,singularityFunc2) => {
-    let sameDomain = (singularityFunc1.domainStart == singularityFunc2.domainStart);
-    let sameExponent = (singularityFunc1.exponent == singularityFunc2.exponent);
-    let sameScale = (singularityFunc1.scale == singularityFunc1.scale);
+    let tolerance = 1e-6;
+    let sameDomain = (Math.abs(singularityFunc1.domainStart - singularityFunc2.domainStart) <  tolerance);
+    let sameExponent = (Math.abs(singularityFunc1.exponent - singularityFunc2.exponent) < tolerance);
+    let sameScale = (Math.abs(singularityFunc1.scale - singularityFunc2.scale) < tolerance);
     
     return (sameDomain && sameExponent && sameScale);
 }
@@ -75,6 +76,19 @@ describe("Determinate Pin-Roller Beam Analysis", function() {
         assert.equal(correct2,true);
         assert.equal(correct3,true);
     })
+
+    it("Test determinate boundary conditions", function() {
+
+        let result = determinateBeam.findBoundaryConditions(supportList);
+
+        let expectedType = 2;
+        let expectedBC1 = [support1.position,0];
+        let expectedBC2 = [support2.position,0];
+
+        assert.equal(result[0],expectedType);
+        assert.deepStrictEqual(result[1],expectedBC1);
+        assert.deepStrictEqual(result[2],expectedBC2);
+    })
 });
 
 describe("Determinate Cantilever Beam Analysis", function() {
@@ -115,10 +129,10 @@ describe("Determinate Cantilever Beam Analysis", function() {
 
         let funcList = determinateBeam._bendingMomentEquationList;
 
-        //bending moment equation should be M = -<x-3> + <x-0> + <x-0>^0
+        //bending moment equation should be M = -<x-3> + <x-0> + 3<x-0>^0
         let res1 = new SingularityFunction(3,-1,1);
         let res2 = new SingularityFunction(0,1,1);
-        let res3 = new SingularityFunction(0,1,0);
+        let res3 = new SingularityFunction(0,3,0);
         let correct1 = false;
         let correct2 = false;
         let correct3 = false;
@@ -132,7 +146,22 @@ describe("Determinate Cantilever Beam Analysis", function() {
         //since length is verified, and simplification gives unique values, if all bool are true, then correct
         assert.equal(correct1,true);
         assert.equal(correct2,true);
-        assert.equal(correct3,true);
+        assert.equal(correct3,true);;
     })
+
+    it("Test determinate boundary conditions", function() {
+
+        let result = determinateBeam.findBoundaryConditions(supportList);
+
+        let expectedType = 1;
+        let expectedBC1 = [support1.position,0];
+        let expectedBC2 = [support1.position,0];
+
+        assert.equal(result[0],expectedType);
+        assert.deepStrictEqual(result[1],expectedBC1);
+        assert.deepStrictEqual(result[2],expectedBC2);
+    })
+
+
 });
 

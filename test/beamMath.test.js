@@ -3,9 +3,10 @@ const BeamMath = require('../beamSolver/beamMath');
 const SingularityFunction = require('../beamSolver/singularityFunction');
 
 const checkFunction = (singularityFunc1,singularityFunc2) => {
-    let sameDomain = (singularityFunc1.domainStart == singularityFunc2.domainStart);
-    let sameExponent = (singularityFunc1.exponent == singularityFunc2.exponent);
-    let sameScale = (singularityFunc1.scale == singularityFunc1.scale);
+    let tolerance = 1e-6;
+    let sameDomain = (Math.abs(singularityFunc1.domainStart - singularityFunc2.domainStart) <  tolerance);
+    let sameExponent = (Math.abs(singularityFunc1.exponent - singularityFunc2.exponent) < tolerance);
+    let sameScale = (Math.abs(singularityFunc1.scale - singularityFunc2.scale) < tolerance);
     
     return (sameDomain && sameExponent && sameScale);
 }
@@ -75,7 +76,7 @@ describe("Beam Maths Library", function() {
         let func1 = new SingularityFunction(3,1,2);//<x-3>^2
         let func2 = new SingularityFunction(2,2,1);//2<x-2>
         let func3 = new SingularityFunction(2,0,4);//0
-        let func4 = new SingularityFunction(2,-3.5,1);//-4.5<x-2>
+        let func4 = new SingularityFunction(2,-4.5,1);//-4.5<x-2>
         let func5 = new SingularityFunction(4,1,2);//<x-4>^2
 
         let funcList = [func1,func2,func3,func4,func5];
@@ -141,10 +142,10 @@ describe("Beam Maths Library", function() {
         let res1 = BeamMath.integrateWithConstantSingularityFuncList(funcList,boundaryCondition);
         let res1expected = new SingularityFunction(3,1/3,3);//1/3<x-3>^3
         let res1expectedConstant = new SingularityFunction(0,-2/3,0);//-2/3
-
+        console.log(2/3 == 0.6666666666666665)
+        console.log(res1)
         assert.equal(checkFunction(res1[0],res1expected),true);
         assert.equal(checkFunction(res1[1],res1expectedConstant),true);
-
         //more complex exmaple, with more functions
         let func2 = new SingularityFunction(2,2,1);//2<x-2>
         let func3 = new SingularityFunction(3,1,2);//<x-3>^2
