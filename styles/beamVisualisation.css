@@ -1,3 +1,11 @@
+.beam-object {
+    background-color: violet;
+    width: 100%;
+    height: 15px;
+    display: inline-block;
+    margin-top: 125px;
+}
+
 .triangle-button {
     width: 0;
     height: 0;
@@ -8,9 +16,6 @@
     cursor: pointer;
 }
 
-.beam-object {
-    background-color: violet;
-    width: 100%;
-    height: 100px;
-    display: inline-block;
+.point-load-object {
+    cursor: pointer;
 }

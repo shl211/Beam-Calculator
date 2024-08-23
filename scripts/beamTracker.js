@@ -5,25 +5,31 @@ const addPointForceButton = document.getElementById('add-point-force');
 
 const canvas = document.getElementById('visualisation-block');
 
-var supportList = [];
+//beam states
+var beamOn = false;
+var supportList = [];//array of values denoting supports -> [name(string),position(float)]
+var forceList = [];//array of values denoting forces -> [name(string),position(float),magnitude(float)]
 var supportCount = 0;
 var forceCount = 0;
-var beamOn = false;
+var beamLength = NaN;
+var momentOfInertia = NaN;
+var modulusOfElasticity = NaN;
 
 //add a support onto canvas if support add button clicked
 addSimpleSupportButton.addEventListener('click', function() {
-    addSimpleSupport();
+    if(beamOn) addSimpleSupport();
 });
 
 addRollerSupportButton.addEventListener('click', function() {
-    addRollerSupport();
+    if(beamOn) addRollerSupport();
 });
 
 addFixedSupportButton.addEventListener('click', function() {
-    addFixedSupport();
+    if(beamOn) addFixedSupport();
 });
 
 //check whether to display beam
+//also update beam states
 window.addEventListener('toggleBeam',function(e) {
 
     //if beam is to be shown and beam is not already shown, show beam
@@ -33,14 +39,19 @@ window.addEventListener('toggleBeam',function(e) {
     }
     //if beam is to be hidden and beam is already shown, hide beam
     else if(!e.detail.showBeam && beamOn) {
-        canvas.removeChild(document.getElementsByClassName('beam-object')[0]);
+        eraseCanvas();
         beamOn = false;
     }
+
+    //update beam states
+    beamLength = e.detail.length;
+    momentOfInertia = e.detail.momentOfInertia;
+    modulusOfElasticity = e.detail.modulusOfElasticity;
 })
 
 //add a force onto canvas if force add button clicked
 addPointForceButton.addEventListener('click', function() {
-    addPointLoad();
+    if(beamOn) addPointLoad();
 });
 
 const addSimpleSupport = function() {
@@ -115,3 +126,17 @@ const addBeam = function() {
     canvas.appendChild(newBeam);
 }
 
+const eraseCanvas = function() {
+    supports = document.querySelectorAll('.triangle-button');
+    forces = document.querySelectorAll('.point-load-object');
+
+    supports.forEach((support) => {
+        canvas.removeChild(support);
+    });
+
+    forces.forEach((force) => {
+        canvas.removeChild(force);
+    });
+
+    canvas.removeChild(document.getElementsByClassName('beam-object')[0]);
+}
