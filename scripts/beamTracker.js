@@ -7,8 +7,8 @@ const canvas = document.getElementById('visualisation-block');
 
 //beam states
 var beamOn = false;
-var supportList = [];//array of values denoting supports -> [name(string),position(float)]
-var forceList = [];//array of values denoting forces -> [name(string),position(float),magnitude(float)]
+var supportList = [];//array of html elements denoting supports
+var forceList = [];//array of html elements denoting forces
 var supportCount = 0;
 var forceCount = 0;
 var beamLength = NaN;
@@ -17,15 +17,15 @@ var modulusOfElasticity = NaN;
 
 //add a support onto canvas if support add button clicked
 addSimpleSupportButton.addEventListener('click', function() {
-    if(beamOn) addSimpleSupport();
+    if(beamOn) addSupports('SIMPLE',0);
 });
 
 addRollerSupportButton.addEventListener('click', function() {
-    if(beamOn) addRollerSupport();
+    if(beamOn) addSupports('ROLLER',0);
 });
 
 addFixedSupportButton.addEventListener('click', function() {
-    if(beamOn) addFixedSupport();
+    if(beamOn) addSupports('FIXED',0);
 });
 
 //check whether to display beam
@@ -51,82 +51,67 @@ window.addEventListener('toggleBeam',function(e) {
 
 //add a force onto canvas if force add button clicked
 addPointForceButton.addEventListener('click', function() {
-    if(beamOn) addPointLoad();
+    if(beamOn) addLoads('POINT',0,0);
 });
 
-const addSimpleSupport = function() {
-    
+function addSupports(supportType,position) {
     let newButton = document.createElement('button');
-    newButton.textContent = `Simple Support ${supportCount}`;
+
+    if(supportType === 'SIMPLE') {
+        newButton.textContent = `Simple Support ${supportCount}`;
+    }
+    else if(supportType === 'ROLLER') {
+        newButton.textContent = `Roller ${supportCount}`;
+    }
+    else if(supportType === 'FIXED') {
+        newButton.textContent = `Fixed End ${supportCount}`;
+    }
+
     newButton.id = `support-${supportCount}`;
     newButton.className = 'triangle-button';
     
     //add event listener to button to allow deletion
     newButton.addEventListener('click', function() {
+        deleteElementFromList(this,supportList);
         canvas.removeChild(this);
     });
 
-
+    supportList.push(newButton);
     canvas.appendChild(newButton);   
     supportCount++;
 }
 
-const addRollerSupport = function() {
-    
+function addLoads(loadType,position,load) {
+
     let newButton = document.createElement('button');
-    newButton.textContent = `Roller ${supportCount}`;
-    newButton.id = `support-${supportCount}`;
-    newButton.className = 'triangle-button';
     
-    //add event listener to button to allow deletion
-    newButton.addEventListener('click', function() {
-        canvas.removeChild(this);
-    });
-
-    canvas.appendChild(newButton);   
-    supportCount++;
-}
-
-const addFixedSupport = function() {
+    if(loadType === 'POINT') {
+        newButton.textContent = `Force ${forceCount}`;
+    }
     
-    let newButton = document.createElement('button');
-    newButton.textContent = `Fixed End ${supportCount}`;
-    newButton.id = `support-${supportCount}`;
-    newButton.className = 'triangle-button';
-
-    //add event listener to button to allow deletion
-    newButton.addEventListener('click', function() {
-        canvas.removeChild(this);
-    });
-
-    canvas.appendChild(newButton);   
-    supportCount++;
-}
-
-const addPointLoad = function() {
-    
-    let newButton = document.createElement('button');
-    newButton.textContent = `Force ${forceCount}`;
     newButton.id = `force-${forceCount}`;
     newButton.className = 'point-load-object';
 
     //add event listener to button to allow deletion
     newButton.addEventListener('click', function() {
+        deleteElementFromList(this,forceList);
         canvas.removeChild(this);
     });
 
+    forceList.push(newButton);
     canvas.appendChild(newButton);   
     forceCount++;
+
 }
 
-const addBeam = function() {
+function addBeam() {
 
     let newBeam = document.createElement('div');
     newBeam.className = 'beam-object';
     canvas.appendChild(newBeam);
 }
 
-const eraseCanvas = function() {
+function eraseCanvas() {
     supports = document.querySelectorAll('.triangle-button');
     forces = document.querySelectorAll('.point-load-object');
 
@@ -139,4 +124,14 @@ const eraseCanvas = function() {
     });
 
     canvas.removeChild(document.getElementsByClassName('beam-object')[0]);
+}
+
+/**
+ * 
+ * @param {HTMLButtonElement} element 
+ * @param {HTMLButtonElement[]} list 
+ */
+function deleteElementFromList(element, list) {
+    let index = list.indexOf(element);
+    list.splice(index,1);
 }
