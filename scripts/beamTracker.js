@@ -8,6 +8,7 @@ const canvas = document.getElementById('visualisation-block');
 var supportList = [];
 var supportCount = 0;
 var forceCount = 0;
+var beamOn = false;
 
 //add a support onto canvas if support add button clicked
 addSimpleSupportButton.addEventListener('click', function() {
@@ -21,6 +22,21 @@ addRollerSupportButton.addEventListener('click', function() {
 addFixedSupportButton.addEventListener('click', function() {
     addFixedSupport();
 });
+
+//check whether to display beam
+window.addEventListener('toggleBeam',function(e) {
+
+    //if beam is to be shown and beam is not already shown, show beam
+    if(e.detail.showBeam && !beamOn) {
+        addBeam();
+        beamOn = true;
+    }
+    //if beam is to be hidden and beam is already shown, hide beam
+    else if(!e.detail.showBeam && beamOn) {
+        canvas.removeChild(document.getElementsByClassName('beam-object')[0]);
+        beamOn = false;
+    }
+})
 
 //add a force onto canvas if force add button clicked
 addPointForceButton.addEventListener('click', function() {
@@ -91,3 +107,11 @@ const addPointLoad = function() {
     canvas.appendChild(newButton);   
     forceCount++;
 }
+
+const addBeam = function() {
+
+    let newBeam = document.createElement('div');
+    newBeam.className = 'beam-object';
+    canvas.appendChild(newBeam);
+}
+

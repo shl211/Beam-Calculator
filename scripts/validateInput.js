@@ -1,7 +1,6 @@
 const BEAMLENGTHMESSAGE = document.getElementById('beam-length-error');
 const INERTIAMESSAGE = document.getElementById('moment-of-inertia-error'); 
 const MODULUSMESSAGE = document.getElementById('modulus-of-elasticity-error'); 
-const VISUALISATIONMESSAGE = document.getElementById('visualisation-block')
 
 const beamLengthInput = document.getElementById('beam-length');
 const beamLengthUnitsInput = document.getElementById('beam-length-unit');
@@ -28,9 +27,7 @@ var modulusValidated = false;
 beamLengthInput.addEventListener('input', function() {  
     let errorMessage = validateBeamLength(beamLengthInput.value);
     BEAMLENGTHMESSAGE.textContent = errorMessage;
-
     triggerVisualisation(lengthValidated,inertiaValidated,modulusValidated);
-
 });
 
 beamLengthUnitsInput.addEventListener('change', function() {
@@ -122,12 +119,82 @@ function validateModulus(modulusInput) {
     }
 }
 
+/**
+ * 
+ * @param {boolean} validLengthInput 
+ * @param {boolean} validateInertiaInput 
+ * @param {boolean} validateModulusInput 
+ */
 function triggerVisualisation(validLengthInput,validateInertiaInput,validateModulusInput) {
-    
-    if(validLengthInput && validateInertiaInput && validateModulusInput){
-        VISUALISATIONMESSAGE.textContent = "READY";
+    let validInput = validLengthInput && validateInertiaInput && validateModulusInput;
+    if(validInput){
+        let lengthSI = convertBeamLengthToSI(beamLength,beamLengthUnit);
+        let inertiaSI = convertInertiaToSI(inertia,inertiaUnit);
+        let modulusSI = convertModulusToSI(modulus,modulusUnit); 
+
+        //need to convert all values to SI units before sending to beam tracker
+        sendDataToBeamTracker(validInput,lengthSI, inertiaSI, modulusSI);
     }
     else {
-        VISUALISATIONMESSAGE.textContent = "";
+        sendDataToBeamTracker(validInput,NaN,NaN,NaN);
+    }
+}
+
+/**
+ * 
+ * @param {boolean} validInputs 
+ * @param {number} beamLength (SI units)
+ * @param {number} inertia (SI units)
+ * @param {number} modulus (SI units)
+ */
+function sendDataToBeamTracker(validInputs,beamLength,inertia,modulus) {
+    const event = new CustomEvent('toggleBeam', {
+        detail: {
+            showBeam: validInputs,
+            length: beamLength,
+            momentOfInertia: inertia,
+            modulusOfElasticity: modulus
+        }
+    });
+    
+    window.dispatchEvent(event);
+}
+
+function convertBeamLengthToSI(length,unit) {
+    switch(unit) {
+        case "m":
+            return length;
+        case "cm":
+            return length/100;
+        case "mm":
+            return length/1000;
+        default:
+            return NaN;
+    }
+}
+
+function convertInertiaToSI(inertia,unit) {
+    switch(unit) {
+        case "m^4":
+            return inertia;
+        case "cm^4":
+            return inertia/(100**4);
+        case "mm^4":
+            return inertia/(1000**4);
+        default:
+            return NaN;
+    }
+}
+
+function convertModulusToSI(modulus,unit) {
+    switch(unit) {
+        case "GPa":
+            return modulus*(10**9);
+        case "MPa":
+            return modulus*(10**6);
+        case "kPa":
+            return modulus*(1000);
+        default:
+            return NaN;
     }
 }
