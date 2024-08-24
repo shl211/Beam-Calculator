@@ -12,16 +12,16 @@ const modulusInput = document.getElementById('modulus-of-elasticity');
 const modulusUnitsInput = document.getElementById('modulus-of-elasticity-unit');
 
 //track following states
-var beamLength;
-var beamLengthUnit;
-var inertia;
-var inertiaUnit;
-var modulus;
-var modulusUnit;
+let beamLength;
+let beamLengthUnit;
+let inertia;
+let inertiaUnit;
+let modulus;
+let modulusUnit;
 
-var lengthValidated = false;
-var inertiaValidated = false;
-var modulusValidated = false;
+let lengthValidated = false;
+let inertiaValidated = false;
+let modulusValidated = false;
 
 //validate inputs, outputting error message if invalid
 beamLengthInput.addEventListener('input', function() {  
@@ -84,11 +84,11 @@ function validateInertia(inertiaInput) {
 
     if(inertiaInput == "") {
         inertiaValidated = false;
-        return "Beam length cannot be empty";
+        return "Moment of inertia cannot be empty";
     }
     else if(inertiaInput <= 0) {
         inertiaValidated = false;
-        return "Beam length must be positive";
+        return "Moment of inertia must be positive";
     }
     else {
         inertiaValidated = true;

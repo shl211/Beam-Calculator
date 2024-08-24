@@ -13,14 +13,14 @@ const pointForceLoadInput = document.getElementById('point-force-magnitude');
 const canvas = document.getElementById('visualisation-block');
 
 //beam states
-var beamOn = false;
-var supportList = [];//array of html elements denoting supports, id will convey info on position and support type
-var forceList = [];//array of html elements denoting forces
-var supportCount = 0;
-var forceCount = 0;
-var length = NaN;
-var momentOfInertia = NaN;
-var modulusOfElasticity = NaN;
+let beamOn = false;
+let supportList = [];//array of html elements denoting supports, id will convey info on position and support type
+let forceList = [];//array of html elements denoting forces
+let supportCount = 0;
+let forceCount = 0;
+let length = NaN;
+let momentOfInertia = NaN;
+let modulusOfElasticity = NaN;
 
 //add a support onto canvas if support add button clicked
 addSimpleSupportButton.addEventListener('click', function() {
