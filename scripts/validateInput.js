@@ -132,10 +132,10 @@ function triggerVisualisation(validLengthInput,validateInertiaInput,validateModu
         let modulusSI = convertModulusToSI(modulus,modulusUnit); 
         console.log(lengthSI,inertiaSI,modulusSI);
         //need to convert all values to SI units before sending to beam tracker
-        sendDataToBeamTracker(validInput,lengthSI, inertiaSI, modulusSI);
+        sendDataToBeamTracker(validInput,lengthSI, inertiaSI, modulusSI); //tell visualisation to be turned on
     }
     else {
-        sendDataToBeamTracker(validInput,NaN,NaN,NaN);
+        sendDataToBeamTracker(validInput,NaN,NaN,NaN); //tell visualisation to be turned off
     }
 }
 

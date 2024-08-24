@@ -36,14 +36,39 @@ class BeamAnalysis {
         this._length = length;
     }
 
+    analyse() {
+        this.checkDeterminacy();
+        this.calculateReactions(this._supportList,this._loadList);
+
+        if(this._determinate) this.analyseDeterminate();   
+    }
+    
     resetAnalysis() {
         this._mechanism = false;
         this._determinate = false;
         this._indeterminate = false;
-
+        
         this._bendingMomentEquationList = [];
         this._slopeEquationList = [];
         this._displacementEquationList = [];
+    }
+    
+    get deflectionEquation() {
+        return this._displacementEquationList;
+    }
+
+    get slopeEquation() {
+        return this._slopeEquationList;
+    }
+
+    get bendingMomentEquation() {
+        return this._bendingMomentEquationList;
+    }
+
+    analyseDeterminate() {
+        this.computeBendingMoments();
+        let BCs = this.findBoundaryConditions(this._supportList);
+        this.computeDeflection(this._bendingMomentEquationList,BCs[0],BCs[1],BCs[2])
     }
 
     checkDeterminacy() {

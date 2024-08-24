@@ -54,7 +54,6 @@ window.addEventListener('toggleBeam',function(e) {
     length = e.detail.length;
     momentOfInertia = e.detail.momentOfInertia;
     modulusOfElasticity = e.detail.modulusOfElasticity;
-    //console.log(length,momentOfInertia,modulusOfElasticity);
 })
 
 //add a force onto canvas if force add button clicked
@@ -160,4 +159,23 @@ function eraseCanvas() {
 function deleteElementFromList(element, list) {
     let index = list.indexOf(element);
     list.splice(index,1);
+}
+
+function sendDataForBeamAnalysis(supportList,forceList) {
+
+    if(supportList.length() == 0 || forceList.length()) {
+        return;
+    }
+    else {
+        const event = new CustomEvent('beamDataForAnalysis', {
+            detail: {
+                supports: supportList,
+                forces: forceList,
+                L: length,
+                E: modulusOfElasticity,
+                I: momentOfInertia
+            }
+        });
+        window.dispatchEvent(event);
+    }
 }
