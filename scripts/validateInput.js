@@ -76,7 +76,6 @@ function validateBeamLength(lengthInput) {
         lengthValidated = true;
         beamLength = lengthInput;
         beamLengthUnit = beamLengthUnitsInput.value;
-        //return `Beam Length is ${beamLength} ${beamLengthUnit}`;
         return "";
     }
 }
@@ -131,7 +130,7 @@ function triggerVisualisation(validLengthInput,validateInertiaInput,validateModu
         let lengthSI = convertBeamLengthToSI(beamLength,beamLengthUnit);
         let inertiaSI = convertInertiaToSI(inertia,inertiaUnit);
         let modulusSI = convertModulusToSI(modulus,modulusUnit); 
-
+        console.log(lengthSI,inertiaSI,modulusSI);
         //need to convert all values to SI units before sending to beam tracker
         sendDataToBeamTracker(validInput,lengthSI, inertiaSI, modulusSI);
     }
@@ -161,6 +160,7 @@ function sendDataToBeamTracker(validInputs,beamLength,inertia,modulus) {
 }
 
 function convertBeamLengthToSI(length,unit) {
+    console.log(length,unit);
     switch(unit) {
         case "m":
             return length;
