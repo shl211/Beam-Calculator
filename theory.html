@@ -180,6 +180,35 @@
 
     <div class="section">
         <p class="sub-heading">Indeterminate Beams</p>
+
+        <p>
+            For indeterminate beams, it is now not possible to find the reaction forces and moments using only force and moment equilibrium. Extra unkowns are introduced, which requires extra equations in order to obtain a unique solution. The extra equations are provided via compatibility equations. From a practical point of view, the idea would be to identify a determinate "sub-beam" within the structure, and cast all other supports as virtual forces. An example is given below:  
+        </p>
+        <p>
+            [Insert example here. Say a cantilever beam with some forces and 2 extra supports. Then another diagram showing decomposition]  
+        </p>
+
+        <p> 
+            The beam can be broken down into "sub-beams" and each one solved for deflection. As linear beam theory is used, the results can then be linearly superposed. For the above example, the beam can be broken down into one cantilever beam with forces, and two beams with unit virtual forces and moments replacing the beam reaction forces and moments. The determinate beam is solved as per usual. The virtual beams will be solved with a variation of the method described in the determinate section. 
+        </p>
+
+        <p> 
+            Compatibility equations were previously mentioned as the solution, but has yet to be implemented until now. For the above example, the simple support is replaced by a unit virtual force. The compatibility condition is that at the simple support, the deflection must be 0. The question to be solved now is what magnitude of virtual force (or in other words what is the reaction force at this support) that will allow the compatibility condition to be satisfied. (Note, if it is a fixed support, then compatibility condition is deflection and slope must be 0. The latter can be considered via a unit virtual force and the latter by a unit virtual moment). By utilising virtual work principle, it can be shown that: 
+
+            $$
+                P^* \Delta = \frac{1}{EI} \int M^* M \,dx
+            $$
+
+            -- This explanation is not quite correct --
+
+            Note that this assumes a homogeneous beam. $P^*$ is the actual load, $\Delta$ is the deflection in the direction of the virtual load, $M$ is the bending moment distribution of the determinate sub-beam and $M^*$ is the bending moment distribution of the virtual beam. This equation can be solved for $P^*$, which is the reaction force at the support. This can be repeated for all supports, and the system can be solved. The bending moment equation can therefore be formulated as: 
+
+            $$
+                M_{intdeterminate}(x) = M_{determinate}(x) + \Sigma P^*_i M^*_{virtual,i}(x)
+            $$
+
+            Deflection can then be found by integrating the bending moment equation, using the boundary conditions in the determinate "sub-beam" as these have yet to be imposed (previously we have been implementing the boundary conditions due to extra supports).
+        </p>
     </div>
 
 </body>

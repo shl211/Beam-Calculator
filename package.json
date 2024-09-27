@@ -11,5 +11,8 @@
   },
   "keywords": [],
   "author": "Stephen Liu",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "mathjs": "^13.1.1"
+  }
 }

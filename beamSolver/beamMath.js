@@ -1,9 +1,14 @@
 //suite of static methods to perform maths operations required for beam solver
 //contains custom methods to manipulate singularityFunction, integration and some matrix solvers
 const SingularityFunction = require('./singularityFunction.js');
+const math = require('mathjs');
 
 class BeamMath {
-    
+    static absicass = [- Math.sqrt(5 + 2 * Math.sqrt(10/7)) / 3, - Math.sqrt(5 - 2 * Math.sqrt(10/7)) / 3, 0,
+                        Math.sqrt(5 - 2 * Math.sqrt(10/7)) / 3, Math.sqrt(5 + 2 * Math.sqrt(10/7)) / 3];
+    static weights = [(322 - 13 * Math.sqrt(70)) / 900, (322 + 13 * Math.sqrt(70)) / 900, 128 / 225,
+                        (322 + 13 * Math.sqrt(70)) / 900, (322 - 13 * Math.sqrt(70)) / 900];
+
     /**
      * 
      * @param {SingularityFunction} singularityFunction1 
@@ -22,6 +27,19 @@ class BeamMath {
         let newScale = singularityFunction1.scale + singularityFunction2.scale;
         
         return new SingularityFunction(domainStart,newScale,exponent);
+    }
+
+    /**
+     * 
+     * @param {SingularityFunction[]} singularityFunction1 
+     * @param {SingularityFunction[]} singularityFunction2 
+     * @returns {SingularityFunction[]} Result of addition of two lists of singularity functions
+     */
+    static addRangeSingularityFunction(singularityFunction1,singularityFunction2) {
+
+        //TODO--------------------------------------------------------------------
+
+        return singularityFunction1;
     }
 
     /**
@@ -206,6 +224,65 @@ class BeamMath {
         return doubleIntegratedFuncList;
     }
 
+    /** NEED TO CHECK IF PLUS OR MINUS -------------------------------------------------
+     * 
+     * @param {SingularityFunction[]} singularityFuncList1 
+     * @param {SingularityFunction[]} singularityFuncList2 
+     * @param {Number} length 
+     * @returns {Number} Virtual work done by two singularity functions
+     */
+    static virtualWorkSymbolic(singularityFuncList1,singularityFuncList2,length) {
+    
+        let res = 0;
+
+        let uniqueDomains = new Set();
+        for(let i = 0; i < singularityFuncList1.length; ++i) {
+            uniqueDomains.add(singularityFuncList1[i].domainStart);
+        }
+        for(let i = 0; i < singularityFuncList2.length; ++i) {
+            uniqueDomains.add(singularityFuncList2[i].domainStart);
+        }
+
+        uniqueDomains.add(0);
+        uniqueDomains.add(length);
+
+        let sortedDomains = Array.from(uniqueDomains).sort((a,b) => a - b);
+
+        for(let i = 0; i < sortedDomains.length - 1; ++i) {
+            res += this.GaussLegendreIntegration(singularityFuncList1,singularityFuncList2,
+                sortedDomains[i],sortedDomains[i+1]);
+        }
+    
+        return res;
+    }
+
+    /**
+     * 
+     * @param {SingularityFunction[]} singularityFuncList1 
+     * @param {SingularityFunction[]} singularityFuncList2 
+     * @param {Number} start
+     * @param {Number} end 
+     * @returns {Number} Integral of Func1 * Func2 over start to end
+     */
+    static GaussLegendreIntegration(singularityFuncList1,singularityFuncList2,start,end) {
+        let sum = 0.0;
+        for(let i = 0; i < 5; ++i) {
+            let newPoint = (start + end) / 2.0 + (end - start) / 2.0 * absicass[i];
+            sum += weights[i] * this.evaluateSingularityFuncList(singularityFuncList1,newPoint) * 
+                this.evaluateSingularityFuncList(singularityFuncList2,newPoint) * (end - start) / 2.0;
+        }
+        return sum;
+    }
+
+    /**
+     * Solve AX = B for X
+     * @param {Number[[]]} A 
+     * @param {Number[[]]} B 
+     * @returns {Number[[]]} X
+     */
+    static matrixSolve(A,B) {
+        return math.lusolve(A,B);
+    }
 }
 
 module.exports = BeamMath;

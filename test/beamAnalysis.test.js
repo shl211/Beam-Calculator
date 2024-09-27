@@ -22,7 +22,7 @@ describe("Determinate Pin-Roller Beam Analysis", function() {
 
     let support1 = new Support(0,"PIN");
     let support2 = new Support(5,"ROLLER");
-    let force = new Force(3,1);
+    let force = new Force(3,"POINT",1);
     let length = 5;
 
     let supportList = [support1,support2];
@@ -42,7 +42,7 @@ describe("Determinate Pin-Roller Beam Analysis", function() {
 
     it("Check reaction forces", function() {
 
-        determinateBeam.calculateReactions(supportList,forceList);
+        determinateBeam.calculateDeterminateReactions(supportList,forceList);
 
         //check support reactions
         assert.equal(support1.reactionForce,-0.4);
@@ -53,9 +53,7 @@ describe("Determinate Pin-Roller Beam Analysis", function() {
 
     it("Check bending moments", function() {
 
-        determinateBeam.computeBendingMoments(supportList,forceList);
-
-        let funcList = determinateBeam._bendingMomentEquationList;
+        let funcList = determinateBeam.computeDeterminateBendingMoments(supportList,forceList);
 
         //bending moment equation should be M = 0.4<x-0> + 0.6<x-5> - <x-3>
         let res1 = new SingularityFunction(0,0.4,1);
@@ -66,7 +64,7 @@ describe("Determinate Pin-Roller Beam Analysis", function() {
         let correct3 = false;
 
         assert.equal(funcList.length,3); //first check correct length for list
-        for(let i = 0; i < 3; ++i) {
+        for(let i = 0; i < 3; ++i) {            
             if(checkFunction(funcList[i],res1)) correct1 = true;
             if(checkFunction(funcList[i],res2)) correct2 = true;
             if(checkFunction(funcList[i],res3)) correct3 = true;
@@ -79,7 +77,7 @@ describe("Determinate Pin-Roller Beam Analysis", function() {
 
     it("Test determinate boundary conditions", function() {
 
-        let result = determinateBeam.findBoundaryConditions(supportList);
+        let result = determinateBeam.findDeterminateBoundaryConditions(supportList);
 
         let expectedType = 2;
         let expectedBC1 = [support1.position,0];
@@ -95,8 +93,12 @@ describe("Determinate Pin-Roller Beam Analysis", function() {
         let BCType = 2;
         let BC1 = [support1.position,0];
         let BC2 = [support2.position,0];
+        let bendingMoment1 = new SingularityFunction(0,0.4,1);
+        let bendingMoment2 = new SingularityFunction(5,0.6,1);
+        let bendingMoment3 = new SingularityFunction(3,-1,1);
+        let bendingMomentList = [bendingMoment1,bendingMoment2,bendingMoment3];
 
-        determinateBeam.computeDeflection(determinateBeam._bendingMomentEquationList,BCType,BC1,BC2);
+        let funcList = determinateBeam.computeDeterminateDeflection(bendingMomentList,BCType,BC1,BC2);
 
         //expect deflection to be v = -1/15<x-0>^3 - 0.1 <x-5>^3 + 1/6 <x-3>^3 + 7/5 <x-0>
         let expectedFunc1 = new SingularityFunction(0,-1/15,3);
@@ -109,12 +111,12 @@ describe("Determinate Pin-Roller Beam Analysis", function() {
         let correct3 = false;
         let correct4 = false;
         
-        assert.equal(determinateBeam._displacementEquationList.length,4); //first check correct length for list
+        assert.equal(funcList.length,4); //first check correct length for list
         for(let i = 0; i < 4; ++i) {
-            if(checkFunction(determinateBeam._displacementEquationList[i],expectedFunc1)) correct1 = true;
-            if(checkFunction(determinateBeam._displacementEquationList[i],expectedFunc2)) correct2 = true;
-            if(checkFunction(determinateBeam._displacementEquationList[i],expectedFunc3)) correct3 = true;
-            if(checkFunction(determinateBeam._displacementEquationList[i],expectedFunc4)) correct4 = true;
+            if(checkFunction(funcList[i],expectedFunc1)) correct1 = true;
+            if(checkFunction(funcList[i],expectedFunc2)) correct2 = true;
+            if(checkFunction(funcList[i],expectedFunc3)) correct3 = true;
+            if(checkFunction(funcList[i],expectedFunc4)) correct4 = true;
         }
         //since length is verified, and simplification gives unique values, if all bool are true, then correct
         assert.equal(correct1,true);
@@ -129,7 +131,7 @@ describe("Determinate Cantilever Beam Analysis", function() {
     let determinateBeam = new BeamAnalysis();
 
     let support1 = new Support(0,"FIXED");
-    let force = new Force(3,1);
+    let force = new Force(3,"POINT",1);
     let length = 5;
 
     let supportList = [support1];
@@ -149,7 +151,7 @@ describe("Determinate Cantilever Beam Analysis", function() {
 
     it("Check reaction forces", function() {
 
-        determinateBeam.calculateReactions(supportList,forceList);
+        determinateBeam.calculateDeterminateReactions(supportList,forceList);
 
         //check support reactions
         assert.equal(support1.reactionForce,-1);
@@ -158,9 +160,7 @@ describe("Determinate Cantilever Beam Analysis", function() {
 
     it("Check bending moments", function() {
 
-        determinateBeam.computeBendingMoments(supportList,forceList);
-
-        let funcList = determinateBeam._bendingMomentEquationList;
+        let funcList = determinateBeam.computeDeterminateBendingMoments(supportList,forceList);
 
         //bending moment equation should be M = -<x-3> + <x-0> + 3<x-0>^0
         let res1 = new SingularityFunction(3,-1,1);
@@ -184,7 +184,7 @@ describe("Determinate Cantilever Beam Analysis", function() {
 
     it("Test determinate boundary conditions", function() {
 
-        let result = determinateBeam.findBoundaryConditions(supportList);
+        let result = determinateBeam.findDeterminateBoundaryConditions(supportList);
 
         let expectedType = 1;
         let expectedBC1 = [support1.position,0];
@@ -200,8 +200,12 @@ describe("Determinate Cantilever Beam Analysis", function() {
         let BCType = 1;
         let BC1 = [support1.position,0];
         let BC2 = [support1.position,0];
+        let bendingMoment1 = new SingularityFunction(3,-1,1);
+        let bendingMoment2 = new SingularityFunction(0,1,1);
+        let bendingMoment3 = new SingularityFunction(0,3,0);
+        let bendingMomentList = [bendingMoment1,bendingMoment2,bendingMoment3];
 
-        determinateBeam.computeDeflection(determinateBeam._bendingMomentEquationList,BCType,BC1,BC2);
+        let funcList = determinateBeam.computeDeterminateDeflection(bendingMomentList,BCType,BC1,BC2);
 
         //expect deflection to be v = 1/6 <x-3>^3 - 1/6 <x-0>^3 - 3/2<x-0>^2
         let expectedFunc1 = new SingularityFunction(3,1/6,3);
@@ -212,18 +216,15 @@ describe("Determinate Cantilever Beam Analysis", function() {
         let correct2 = false;
         let correct3 = false;
         
-        assert.equal(determinateBeam._displacementEquationList.length,3); //first check correct length for list
+        assert.equal(funcList.length,3); //first check correct length for list
         for(let i = 0; i < 3; ++i) {
-            if(checkFunction(determinateBeam._displacementEquationList[i],expectedFunc1)) correct1 = true;
-            if(checkFunction(determinateBeam._displacementEquationList[i],expectedFunc2)) correct2 = true;
-            if(checkFunction(determinateBeam._displacementEquationList[i],expectedFunc3)) correct3 = true;
+            if(checkFunction(funcList[i],expectedFunc1)) correct1 = true;
+            if(checkFunction(funcList[i],expectedFunc2)) correct2 = true;
+            if(checkFunction(funcList[i],expectedFunc3)) correct3 = true;
         }
         //since length is verified, and simplification gives unique values, if all bool are true, then correct
         assert.equal(correct1,true);
         assert.equal(correct2,true);
         assert.equal(correct3,true);
     })
-
-
 });
-

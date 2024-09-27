@@ -7,11 +7,12 @@ describe("Point Force", function() {
 
         let position = 10.4;
         let load = -42; //down
+        let forceType = "POINT";
 
-        let force = new Force(position,load);
+        let force = new Force(position,forceType,load);
 
         assert.strictEqual(force.position,position);
         assert.strictEqual(force.load,load);
+        assert.strictEqual(force.forceType,forceType);
     });
-
 });
